@@ -88,7 +88,7 @@
                   // echo $measurement . "<br />";
                   // query for inserting into input physical count.
                   // $sql = "INSERT INTO input_physical_count(rmID, userID, quantity, date) VALUES('$rmID[$i]', '$userID', '$quantity[$i]', '$date')";
-                  // $result = mysqli_query($conn, $sql);
+                  // $result = mysqli_query($conn, $sql);  
 
 
                   $compareQuantity = $measurement * $quantity[$i];
