@@ -40,10 +40,6 @@
 
 
             $rmName = $row['rmName'];
-            $quantity = $row['quantity'];
-            if($quantity < 0){
-                $quantity = 0;
-            }
 
             $measurement_value = $row['measurement_value'];
             $measurement = $row['measurement'];
