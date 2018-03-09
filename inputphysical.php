@@ -9,6 +9,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            <!-- wala lang -->
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
@@ -104,7 +105,7 @@
                       $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
                       $resulta = mysqli_query($conn,$sql);
                     }
-                    
+
                     $i += $resu->num_rows-1;
                   }
                   else {
