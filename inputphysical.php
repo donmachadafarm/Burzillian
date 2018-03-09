@@ -9,7 +9,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- wala lang lang -->
+            <!-- wala lang lang lang -->
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
