@@ -10,6 +10,7 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- wala lang lang lang adik ako-->
+            <!-- wala lang lang bagong dagdag-->
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
