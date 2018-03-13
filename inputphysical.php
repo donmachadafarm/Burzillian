@@ -9,8 +9,7 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- wala lang lang lang adik ako-->
-            <!-- wala lang lang bagong dagdag-->
+            <!-- wala lang-->
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
@@ -122,7 +121,6 @@
                   }
 
               }//end of for loop
-
 
         }//end of if count > 0
 
