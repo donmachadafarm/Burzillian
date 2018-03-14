@@ -59,13 +59,14 @@
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
-                                    $query ="Select '$date' as date, rmName, sum(quantity) as 'quantity', measurement, measurement_value, purchasedate, ingID
+                                   
+                                    $query = mysqli_query($conn, "Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate
                                             from record_purchases
                                             where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
                                             group by rmName
-                                            order by purchasedate ASC;";
-                                    $result=mysqli_query($conn,$query);
-                                    while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                                            order by purchasedate ASC;");
+                                    //$result=mysqli_query($conn,$query);
+                                    while($row=mysqli_fetch_array($query)){
                                     echo '<tr">';
                                         echo "<td>{$row['date']}</td>";
                                         echo "<td>{$row['rmName']}</a></td>";
@@ -84,7 +85,7 @@
 
                         ?>
 
-                           <center> <a data-toggle="modal" href="#inventoryreport" class="btn btn-primary">View Report</a>
+                        <center> <a data-toggle="modal" href="#inventoryreport" class="btn btn-primary">View Report</a>
                         <div class="modal fade" id="inventoryreport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -107,13 +108,11 @@
                                         <th>Date</th>
                                         <th>Raw Material</th>
                                         <th>Quantity</th>
-                                        <th>Measurement Value</th>
-                                        <th>Measurement Type</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                $query ="Select '$date' as date, rmName, sum(quantity) as 'quantity', measurement, measurement_value, purchasedate, purchaseID
+                                $query ="Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate, purchaseID
                                             from record_purchases
                                             where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
                                             group by purchaseID;";
@@ -123,8 +122,6 @@
                                         echo "<td>{$row['purchasedate']}</td>";
                                         echo "<td>{$row['rmName']}</td>";
                                         echo "<td>{$row['quantity']}</td>";
-                                        echo "<td>{$row['measurement_value']}</td>";
-                                        echo "<td>{$row['measurement']}</td>";
 
                                     echo '</tr>';
                                     }

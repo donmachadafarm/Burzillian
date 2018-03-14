@@ -48,12 +48,12 @@
                                     </style>
 
         <br>
-        <button class="btn btn-default" id="addraw">Add Raw Material</button>
+        <button class="btn cart" id="addraw">Add Raw Material</button>
         </form>
 
 
         <?php
-        $quantity = 0;
+
    // require 'Connect.php';
     $flag = 0;
   if(empty($_POST['rmName'])){
@@ -62,13 +62,12 @@
     } else
     $rmName = ($_POST['rmName']);
 
-    // if(empty($_POST['quantity'])){
-    // $quantity = '';
-    // $flag=1;
-    // } else
-    if(isset($_POST['quantity'])){
-      $quantity = ($_POST['quantity']);
-        }
+    if(empty($_POST['quantity'])){
+    $quantity = '';
+    $flag=1;
+    } else
+    $quantity = ($_POST['quantity']);
+
     $purchasedate = date('Y-m-d');
 
     $measurement_value = 0;
@@ -84,20 +83,17 @@
         $measurement_value = $row['measurement_value'];
            if($inv_rmName == $rmName){
             $ingID = $row['inv_ID'];
-        $measurement_value = $row['measurement_value'];
+        $measurement_value = $row['measurement_value']; 
          $totalinDB = $row['total'];
           }
 
         }
-        // echo $quantity;
-        // echo $measurement_value;
 
             $totalQuantity = $quantity * $measurement_value;
+            $total = $totalinDB + $totalQuantity;   
 
-            $total = $totalinDB + $totalQuantity;
 
-
-        $sql3 = mysqli_query($conn, " UPDATE ingredient SET total = $total WHERE ingID = '$ingID'");
+        $sql3 = mysqli_query($conn, " UPDATE ingredient SET total = $total WHERE ingID = '$ingID'"); 
 
    /* $result = mysqli_query($conn, 'SELECT *
                             FROM inventory');
@@ -161,14 +157,14 @@
         $measurement_value = $row['measurement_value'];
            if($inv_rmName == $rmName){
             $ingID = $row['inv_ID'];
-        $measurement_value = $row['measurement_value'];
+        $measurement_value = $row['measurement_value']; 
          $totalinDB = $row['total'];
           }
 
         }
 
             $totalQuantity = $quantity * $measurement_value;
-            $total = $totalinDB + $totalQuantity;
+            $total = $totalinDB + $totalQuantity;   
 
     /*    echo "MEASUREMENT VALUE ";
         echo $measurement_value;

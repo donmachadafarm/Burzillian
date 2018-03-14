@@ -25,8 +25,8 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Convert From</th>
                                             <th>Convert To</th>
+                                            <th>Convert From</th>
                                             <th>Value</th>
 
                                         </tr>
