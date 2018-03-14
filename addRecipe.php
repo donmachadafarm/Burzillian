@@ -1,5 +1,9 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype']) || $_SESSION['usertype']!=102){
+        echo "<script>window.location='logout.php'</script>";
+      }
  ?>
 
         <div id="page-wrapper">
@@ -24,19 +28,19 @@
                 $message.='<p>You forgot to enter the Product ID!';
                 }else
                 $prodID=$_POST['prodID'];
-            
+
                 if (empty($_POST['mVal'])){
                 $mVal=FALSE;
                 $message.='<p>You forgot to enter the Measurement Value!';
                 }else
                 $mVal=$_POST['mVal'];
-            
+
                 if (empty($_POST['rInstruct'])){
                 $rInstruct=NULL;
                  $message.='<p>You forgot to enter the Instructions!';
                 }else
                 $rInstruct=$_POST['rInstruct'];
-                
+
                 if(!isset($message)){
 
                 /*$sql = mysqli_query($conn,'SELECT * from product ORDER BY prodID DESC');
@@ -48,13 +52,13 @@
 
                 $query=mysqli_query($conn, "insert into recipe (recipeName, instruction, prodID) values ('{$selectProduct}', '{$rInstruct}', '{$prodID}')");
 
-                
+
                 $nVal= array();
                 $nType= array();
 
                   $rCheck = $_POST['checkbox'];
                 $rIng = $_POST['selectMeasure'];
-                
+
                 foreach ($mVal as $index => $val){
                     if($val != NULL){
                         array_push($nVal, $val);
@@ -66,12 +70,12 @@
                     }
                 }
                 $query1 = mysqli_query($conn, "SELECT * FROM recipe WHERE recipeID = (SELECT MAX(recipeID) FROM recipe)");
-            
+
                 while($row=mysqli_fetch_array($query1)){
                    // if($row['recipeName'] == $rName){
                         //$rRcp = $row['recipeID'];
                         //echo $rRcp;
-                        foreach($nVal as $index => $val){      
+                        foreach($nVal as $index => $val){
 
                             $convert = mysqli_query($conn, 'SELECT * FROM converter');
 
@@ -79,8 +83,8 @@
                             {
                                 if($nType[$index] == $row['convertID']){
                                     $new_val = $val*$row['convert_value'];
-                                } 
-                            }   
+                                }
+                            }
 
                             echo $rCheck[$index];
                             echo " // ";
@@ -92,15 +96,15 @@
                             echo "<br>";
                             $query2 = mysqli_query($conn, "INSERT INTO recipeing (recipeID,ingID, measureID, measureVal, converted_measurement) VALUES ((SELECT MAX(recipeID) FROM recipe),'{$rCheck[$index]}', '{$nType[$index]}', '{$val}', '{$new_val}')");
                         }
-                    
+
                     //}
                 }
-                
-                
+
+
                 $message="<b><p style = 'color:green;'>Ingredient has been Successfuly Added!</p></b>";
                 $flag=1;
                 }
-                
+
 
                 }/*End of main Submit conditional*/
 
@@ -150,23 +154,23 @@
 
                                             }
                                         </style>
-                                        
+
                                         </div>
                                         <div class="form-group">
                                             <label>Ingredients</label>
 
 <div id="div1">
                                             <?php
-                                           
+
                                             $sql=mysqli_query($conn, "select * from ingredient");
-                                    
-                                            
+
+
                                             while($row=mysqli_fetch_array($sql)){
                                                 echo '<div class = "checkbox">';
-                                                echo "<label><input name = \"checkbox[]\" type = \"checkbox\" value = \"{$row['ingID']}\"/>{$row['ingName']}</label><br>"; 
+                                                echo "<label><input name = \"checkbox[]\" type = \"checkbox\" value = \"{$row['ingID']}\"/>{$row['ingName']}</label><br>";
                                                 echo "&nbsp";
                                                 $sql1=mysqli_query($conn, "select * from converter");
-                                                echo "<input name = \"mVal[]\" type = \"number\" value = \"\"/>&nbsp"; 
+                                                echo "<input name = \"mVal[]\" type = \"number\" value = \"\"/>&nbsp";
                                                 echo "<select name= 'selectMeasure[]'>";
                                                     while($row=mysqli_fetch_array($sql1)){
                                                         echo "<option value = \"{$row['convertID']}\">{$row['convert_from']}</option>";
@@ -177,14 +181,14 @@
                                             ?></div>
 <style>
                                             #div1{
-  
+
   padding-top: 1px;
-  overflow: auto; 
+  overflow: auto;
   max-height: 40vh;
   width: 100%;
 
 }</style>
-                                        </div> 
+                                        </div>
                                          <div class="form-group">
                                             <label>Instructions</label>
                                             <textarea name = "rInstruct" class="form-control" rows="10" id="comment"></textarea>

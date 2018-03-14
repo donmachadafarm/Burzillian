@@ -1,5 +1,9 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype'])){
+        echo "<script>window.location='logout.php'</script>";
+      }
 ?>
 
 

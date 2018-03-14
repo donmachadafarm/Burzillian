@@ -1,5 +1,9 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype']) || $_SESSION['usertype']!=102){
+        echo "<script>window.location='logout.php'</script>";
+      }
  ?>
 
 <div id="page-wrapper">
@@ -83,17 +87,17 @@
         $measurement_value = $row['measurement_value'];
            if($inv_rmName == $rmName){
             $ingID = $row['inv_ID'];
-        $measurement_value = $row['measurement_value']; 
+        $measurement_value = $row['measurement_value'];
          $totalinDB = $row['total'];
           }
 
         }
 
             $totalQuantity = $quantity * $measurement_value;
-            $total = $totalinDB + $totalQuantity;   
+            $total = $totalinDB + $totalQuantity;
 
 
-        $sql3 = mysqli_query($conn, " UPDATE ingredient SET total = $total WHERE ingID = '$ingID'"); 
+        $sql3 = mysqli_query($conn, " UPDATE ingredient SET total = $total WHERE ingID = '$ingID'");
 
    /* $result = mysqli_query($conn, 'SELECT *
                             FROM inventory');
@@ -157,14 +161,14 @@
         $measurement_value = $row['measurement_value'];
            if($inv_rmName == $rmName){
             $ingID = $row['inv_ID'];
-        $measurement_value = $row['measurement_value']; 
+        $measurement_value = $row['measurement_value'];
          $totalinDB = $row['total'];
           }
 
         }
 
             $totalQuantity = $quantity * $measurement_value;
-            $total = $totalinDB + $totalQuantity;   
+            $total = $totalinDB + $totalQuantity;
 
     /*    echo "MEASUREMENT VALUE ";
         echo $measurement_value;

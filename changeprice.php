@@ -1,5 +1,9 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype']) || $_SESSION['usertype']!=102){
+        echo "<script>window.location='logout.php'</script>";
+      }
  ?>
 
   <div id="page-wrapper">
@@ -74,7 +78,7 @@
 													}
 													?>
 													</select>
-           
+
                                                         </br>
                                                         <label>New Price: </label></br><input type="text" name="new_price" class="form-control" value="<?php if (isset($_POST['new_price'])) echo $_POST['new_price']; ?>"/>
                                                         </br>
@@ -105,7 +109,7 @@ $message=NULL;
     $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
     $old_price = $row['price'];
 
-  
+
  if (empty($_POST['new_price'])){
   $new_price=FALSE;
   $message.='<p>You forgot to enter the new price!';

@@ -1,5 +1,10 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype']) || $_SESSION['usertype']!=101){
+        echo "<script>window.location='logout.php'</script>";
+      }
+
  ?>
 
        <div id="page-wrapper">
@@ -59,7 +64,7 @@
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
-                                   
+
                                     $query = mysqli_query($conn, "Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate
                                             from record_purchases
                                             where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
