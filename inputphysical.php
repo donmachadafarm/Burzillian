@@ -123,7 +123,7 @@
                       $resulta = mysqli_query($conn,$sql);
                     }
                   }
-
+                  // new comment
               }//end of for loop
 
         }//end of if count > 0
