@@ -86,14 +86,6 @@
                                 }
                             }
 
-                            echo $rCheck[$index];
-                            echo " // ";
-                            echo $nType[$index];
-                            echo " // ";
-                            echo $val;
-                            echo " // ";
-                            echo $new_val;
-                            echo "<br>";
                             $query2 = mysqli_query($conn, "INSERT INTO recipeing (recipeID,ingID, measureID, measureVal, converted_measurement) VALUES ((SELECT MAX(recipeID) FROM recipe),'{$rCheck[$index]}', '{$nType[$index]}', '{$val}', '{$new_val}')");
                         }
 
@@ -133,7 +125,7 @@
                                     <form role="form" method="post">
                                        <div class="form-group">
                                       <?php
-        $sql = mysqli_query($conn,'SELECT * from product ORDER BY prodName ASC');
+        $sql = mysqli_query($conn,'SELECT * from product ORDER BY prodName DESC');
 
         while($row = mysqli_fetch_array($sql)){
             $selectProduct = $row['prodName'];

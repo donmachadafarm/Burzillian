@@ -37,7 +37,7 @@
 
                           //  $query = mysqli_query($conn,"SELECT ING.ingName, INV.measurement, INV.ingID, ING.ingID, sum(quantity * measurement_value) AS total FROM inventory INV JOIN ingredient ING ON ING.ingID = INV.ingID GROUP BY ING.ingName");
 
-                               $query = mysqli_query($conn, "SELECT * FROM ingredient");
+                               $query = mysqli_query($conn, "SELECT ingredient.ingID, ingredient.ingName, ingredient.total, ingredient.measurement, inventory.ingID, inventory.measurement FROM ingredient JOIN inventory ON ingredient.ingID = inventory.ingID GROUP BY ingredient.ingName");
 
 
                                     while($row = mysqli_fetch_array($query)){
