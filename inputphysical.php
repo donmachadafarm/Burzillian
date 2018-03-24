@@ -13,7 +13,6 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- wala lang-->
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
@@ -66,7 +65,7 @@
         if (isset($_POST['submit'])){
           $message=NULL;
           // counting all rawmats in the inventory
-          $query1 = mysqli_query($conn,"select count(ingID) as count from inventory");
+          $query1 = mysqli_query($conn,"SELECT count(ingID) AS count FROM inventory");
           while($row=mysqli_fetch_array($query1)){
               $count = $row['count'];
               // $count for container rawmat count in inventory
