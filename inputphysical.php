@@ -95,33 +95,36 @@
                   $resu = mysqli_query($conn,"SELECT * FROM inventory WHERE ingID = '$ingID[$i]'");
                   $computedvalue = 0;
                   $rowd = mysqli_fetch_array($resf);
-                  if ($resu->num_rows > 1) {
-                    // for repeating ingID's
-                    for ($j=0; $j < $resu->num_rows; $j++) {
-                      $row = mysqli_fetch_array($resu);
-                      $tempcount = $quantity[$j] * $row['measurement_value'];
-                      $computedvalue = $computedvalue + $tempcount;
-                    }
-                    if ($computedvalue!=$rowd['total']) {
-                      $temp = $computedvalue - $rowd['total'];
-                      $iding = $rowd['ingID'];
-                      $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
-                      $resulta = mysqli_query($conn,$sql);
-                    }
+                  if ($quantity[$i] > 0) {
+                    if ($resu->num_rows > 1) {
+                      // for repeating ingID's
+                      for ($j=0; $j < $resu->num_rows; $j++) {
+                        $row = mysqli_fetch_array($resu);
+                        $tempcount = $quantity[$j] * $row['measurement_value'];
+                        $computedvalue = $computedvalue + $tempcount;
+                      }
+                      if ($computedvalue!=$rowd['total']) {
+                        $temp = $computedvalue - $rowd['total'];
+                        $iding = $rowd['ingID'];
+                        $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
+                        $resulta = mysqli_query($conn,$sql);
+                      }
 
-                    $i += $resu->num_rows-1;
-                  }
-                  else {
-                    // for non repeating ingID
-                    $row = mysqli_fetch_array($resu);
-                    $computedvalue = $quantity[$i] * $row['measurement_value'];
-                    if ($computedvalue!=$rowd['total']) {
-                      $temp = $computedvalue - $rowd['total'];
-                      $iding = $rowd['ingID'];
-                      $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
-                      $resulta = mysqli_query($conn,$sql);
+                      $i += $resu->num_rows-1;
+                    }
+                    else {
+                      // for non repeating ingID
+                      $row = mysqli_fetch_array($resu);
+                      $computedvalue = $quantity[$i] * $row['measurement_value'];
+                      if ($computedvalue!=$rowd['total']) {
+                        $temp = $computedvalue - $rowd['total'];
+                        $iding = $rowd['ingID'];
+                        $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
+                        $resulta = mysqli_query($conn,$sql);
+                      }
                     }
                   }
+
                   // next code
               }//end of for loop
 

@@ -64,9 +64,10 @@
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
-                                    $query ="Select '.$date.' as date, sum(receipt.quantity) as 'quantity', sum(receipt.subTotal) as 'income'
-                                            from sales_order join receipt on sales_order.salesID = receipt.salesID
-                                            where sales_order.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}';";
+                                    $query =
+"SELECT '.$date.' as 'date', COUNT(PR.receiptID) AS 'quantity', SUM(PR.totalPrice) as 'income'
+FROM productreceipt PR
+WHERE PR.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}';";
                                     $result=mysqli_query($conn,$query);
                                     while($row=mysqli_fetch_array($result)){
                                     echo '<tr">';
@@ -77,8 +78,7 @@
                                                 echo "<a href = 'viewSalesReport.php'>View Report</a>";
                                         echo'</td>';
                                     echo '</tr>';
-                                    }
-                                    echo  $_SESSION['from_date'] ;
+                                    };
 
                                 }
 

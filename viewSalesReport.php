@@ -1,5 +1,9 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
+
+      if (!isset($_SESSION['usertype']) || $_SESSION['usertype']!=101){
+        echo "<script>window.location='logout.php'</script>";
+      }
  ?>
         <div id="page-wrapper">
             <div class="row">
@@ -36,12 +40,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>';
-                                $query="Select sales_order.salesDate as 'date', receipt.prodName as 'product', product.price as 'price',
-                                    receipt.quantity as 'quantity', receipt.subTotal as 'subTotal' from receipt join sales_order on
-                                    receipt.salesID = sales_order.salesID join product on
-                                    receipt.prodName = product.prodName
-                                    where sales_order.salesDate BETWEEN '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
-                                    group by receipt.prodName, sales_order.salesDate;";
+                                $query=
+"SELECT PR.salesDate as 'date', S.prodName as 'product',(S.subTotal / S.quantity) as 'price', S.quantity as 'quantity', S.subTotal as 'subTotal'
+FROM productreceipt PR
+JOIN products_sales_receipt S
+ON PR.receiptID = S.receiptID
+WHERE PR.salesDate BETWEEN
+'".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
+GROUP BY S.prodName, PR.salesDate;";
                                 $result=mysqli_query($conn,$query);
 
                                 while($row=mysqli_fetch_array($result)){
@@ -57,10 +63,11 @@
 
                             echo '</tbody>
                                 </table>';
-                                $query1="Select sum( receipt.subTotal) as 'total'
-                                    from receipt join sales_order on receipt.salesID = sales_order.salesID
-                                    join product on receipt.prodName = product.prodName
-                                    where sales_order.salesDate BETWEEN '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."';";
+                                $query1=
+"SELECT SUM(PR.totalPrice) AS 'total'
+FROM productreceipt PR
+WHERE PR.salesDate BETWEEN
+'".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."';";
                                 $result1=mysqli_query($conn,$query1);
 
                             echo '<div style="font-weight:bold;font-size:20px;display: flex; justify-content: center;">';
