@@ -151,7 +151,9 @@
                                                <li>
                                                     <a href='changepricereport.php'>Historical Change Price Report</a>
                                                 </li>
-
+                                                <li>
+                                                     <a href='discrepancyreport.php'>Discrepancy Report</a>
+                                                 </li>
                                        </ul>
                                        </li>";
                                   }
