@@ -4,8 +4,15 @@ include 'includes/sections/header.php';
 if ($_SESSION['usertype']!=101)
        header("Location:logout.php");
 
-if (isset($_POST['submit'])){
+if (isset($_POST['remove'])){
+  $deletedaccount = $_POST['username'];
+  $query = "DELETE * FROM users WHERE username = '$deletedaccount'";
 
+  if (mysqli_query($conn,$query)) {
+    echo "jonjon";
+  }else {
+    echo "di gumana";
+  }
 }/*End of main Submit conditional*/
 
 include 'includes/sections/navbar.php';
@@ -61,16 +68,19 @@ include 'includes/sections/navbar.php';
                               <div class="card card-register mx-auto mt-5">
                                 <div class="card-header">Remove an employee</div>
                                 <div class="card-body">
-                                  <form method="post" action="#.php">
+                                  <form method="post" action="">
                                     <div class="form-group">
                                       <div class="form-row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-8">
                                           <label for="exampleInputName">Username</label>
                                           <input name="username" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter first name" required>
+                                          <br />
+                                        </div>
+                                        <div class="col-md-8">
+                                          <button name="remove" type="submit" class="btn btn-danger btn-block">Remove User</button>
                                         </div>
                                       </div>
                                     </div>
-                                    <button name="remove" type="submit" class="btn btn-danger btn-block">Remove User</button>
                                   </form>
                                 </div>
                               </div>

@@ -44,7 +44,7 @@
                                         <th>Physical Count</th>
                                         <th>Disc</th>
                                         <th>Date Counted</th>
-                                        <th>Counted By:</th>  
+                                        <th>Counted By:</th>
                                     </tr>
                                 </thead>
                                 <tbody>';

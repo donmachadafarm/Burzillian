@@ -52,7 +52,7 @@
                                     </style>
 
         <br>
-        <button class="btn cart" id="addraw">Add Raw Material</button>
+        <button class="btn default" id="addraw">Add Raw Material</button>
         </form>
 
 
@@ -67,7 +67,7 @@
     $rmName = ($_POST['rmName']);
 
     if(empty($_POST['quantity'])){
-    $quantity = '';
+    $quantity = 0;
     $flag=1;
     } else
     $quantity = ($_POST['quantity']);

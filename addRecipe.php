@@ -125,7 +125,7 @@
                                     <form role="form" method="post">
                                        <div class="form-group">
                                       <?php
-        $sql = mysqli_query($conn,'SELECT * from product ORDER BY prodName DESC');
+        $sql = mysqli_query($conn,'SELECT * from product ORDER BY prodID ASC');
 
         while($row = mysqli_fetch_array($sql)){
             $selectProduct = $row['prodName'];

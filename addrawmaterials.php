@@ -11,7 +11,7 @@
                     <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-    
+
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
@@ -42,45 +42,45 @@
 		$temp = ($_POST['measurement']);
 	if($measurement == "Liter" || $measurement == "Kilogram"){
 	$measurement = ($_POST['measurement']);
-	
+
 	}
-	
+
 	else{
-		$query = "SELECT * 
+		$query = "SELECT *
 				FROM converter WHERE convert_from = '$measurement' ";
 		$result=mysqli_query($conn,$query);
 		$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
 		$measurement = $row['convert_to'];
-	
+
 	}
 	}
-    
+
 	if(empty($_POST['measurement_value'])){
     $measurement_value = '';
     $flag=1;
     } else{
    $measurement_value = ($_POST['measurement_value']);
- 
+
     if($temp == "Liter" || $temp == "Kilogram"){
 	$measurement_value = ($_POST['measurement_value']);
 	}
-	
+
 	else{
-			$query1 = "SELECT * 
+			$query1 = "SELECT *
 				FROM converter WHERE convert_from = '$temp' ";
 		$result1=mysqli_query($conn,$query1);
 		$row1=mysqli_fetch_array($result1,MYSQLI_ASSOC);
 		$temp1 = $row1['convert_value'];
 	$measurement_value = $measurement_value * $temp1;
-	
+
 	}
 	}
-    
+
   $quantity = 0;
 
 
-    $sql1 = " INSERT INTO inventory(quantity, rmName, measurement_value, measurement, ingID) 
-            VALUES ('$quantity', '$rmName', '$measurement_value', '$measurement', '$ingID'); ";
+    $sql1 = " INSERT INTO inventory(rmName, measurement_value, measurement, ingID)
+            VALUES ('$rmName', '$measurement_value', '$measurement', '$ingID'); ";
 
 
 
@@ -88,9 +88,9 @@
     $result = mysqli_query($conn,$sql1);
         if (!$result){
           die('Invalid Input: ' . mysqli_error().$sql);
-        }  
+        }
         else{
-          echo "<script> alert('Successfully Added'); 
+          echo "<script> alert('Successfully Added');
                 window.location.href='rawmaterials.php';
                 </script> ";
         }
@@ -123,17 +123,17 @@
                                 FROM converter');
 
         while($row = mysqli_fetch_array($result)){
-            
+
             $convert_from = $row['convert_from'];
             $convert_to = $row['convert_to'];
 
-             echo "<label><option value = \"{$row['convert_from']}\"/>{$row['convert_from']}</label>"; 
+             echo "<label><option value = \"{$row['convert_from']}\"/>{$row['convert_from']}</label>";
              echo "<br>";
         }
-           
 
-             echo "<label><option value = \"Liter\"/>Liter</label> <br>"; 
-             echo "<label><option value = \"Kilogram\"/>Kilogram</label>"; 
+
+             echo "<label><option value = \"Liter\"/>Liter</label> <br>";
+             echo "<label><option value = \"Kilogram\"/>Kilogram</label>";
              echo "</div>";
 ?>
 </select>
@@ -150,7 +150,7 @@
        <div class="form-group">
        <p class="form-control-static">
         <label class="control-label"  for="ingName">Type:</label>
-        <select name ="ingID" class="form-control">                               
+        <select name ="ingID" class="form-control">
     <?php
     //require 'Connect.php';
     $flag=0;
@@ -159,18 +159,18 @@
         $result = mysqli_query($conn, 'SELECT *
                                 FROM ingredient');
 
-        
+
         while($row = mysqli_fetch_array($result)){
-            
+
         $ingID = $row['ingID'];
-             echo "<label><option value = \"{$ingID}\"/>{$row['ingName']}</label>"; 
-             
+             echo "<label><option value = \"{$ingID}\"/>{$row['ingName']}</label>";
+
         }
-           
+
             ?>
-            </select> 
+            </select>
 <br><br>
-                                
+
         <button type="submit" class="btn btn-success" value="submit">Add Raw Material</button>
         </form>
 
