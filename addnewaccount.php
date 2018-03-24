@@ -55,9 +55,16 @@ $message = "<b><p>Username already exists!";
 if(!isset($message)){
 
 $query="insert into users (username,password,fullName,address,contactNo,usertype) values ('{$username}','{$password}','{$fullname}','{$address}','{$contactno}','{$usertype}')";
-$result=mysqli_query($conn,$query);
-$message="<b><p>Username: {$username}<br>Fullname: {$fullname}<br>Contact Number: {$contactno}<br>Address: {$address}<br> SUCCESSFUL! </b>";
-$flag=1;
+if (mysqli_query($conn,$query)) {
+  $message="<b><p>Username: {$username}<br>Fullname: {$fullname}<br>Contact Number: {$contactno}<br>Address: {$address}<br> SUCCESSFUL! </b>";
+  $flag=1;
+}else {
+  echo "<script> alert('Failed to Add account!');
+      </script>";
+}
+
+
+
 
 }
 

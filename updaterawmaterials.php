@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-		require 'Connect.php';
+		// require 'Connect.php';
 
 $rmName = isset($_POST['rmName']);
 $quantity = $_POST['quantity'];
@@ -13,7 +13,7 @@ $ingName = $_POST['ingName'];
 $sql1 = "UPDATE record_purchases
 		 SET rmName = '$rmName', quantity = '$quantity', purchasedate = '$purchasedate', measurement_value = '$measurement_value', measurement = '$measurement', ingName = '$ingName';
 		 ";
-		 
+
 		 $result1 = mysql_query($sql1);
 		 if(!$result1){
 		 	die ('Invalid ' . mysql_error().$sql1);

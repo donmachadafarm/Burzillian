@@ -5,13 +5,14 @@ if ($_SESSION['usertype']!=101)
        header("Location:logout.php");
 
 if (isset($_POST['remove'])){
-  $deletedaccount = $_POST['username'];
-  $query = "DELETE * FROM users WHERE username = '$deletedaccount'";
+  $deletedaccount = $_POST['userID'];
+  $query = "DELETE FROM users WHERE userID = '$deletedaccount'";
 
   if (mysqli_query($conn,$query)) {
-    echo "jonjon";
+    echo "<script> alert('Succesfully removed account!');
+        </script>";
   }else {
-    echo "di gumana";
+    echo "di gumana<br>";
   }
 }/*End of main Submit conditional*/
 
@@ -66,18 +67,18 @@ include 'includes/sections/navbar.php';
                                 </div>
                               </div>
                               <div class="card card-register mx-auto mt-5">
-                                <div class="card-header">Remove an employee</div>
+                                <div class="card-header"><b>Remove an employee</b></div>
                                 <div class="card-body">
                                   <form method="post" action="">
                                     <div class="form-group">
                                       <div class="form-row">
                                         <div class="col-md-8">
-                                          <label for="exampleInputName">Username</label>
-                                          <input name="username" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter first name" required>
+                                          <label for="exampleInputName">User ID</label>
+                                          <input name="userID" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter UserID" required>
                                           <br />
                                         </div>
                                         <div class="col-md-8">
-                                          <button name="remove" type="submit" class="btn btn-danger btn-block">Remove User</button>
+                                          <input name="remove" type="submit" value="Remove" class="btn btn-danger btn-block">
                                         </div>
                                       </div>
                                     </div>
