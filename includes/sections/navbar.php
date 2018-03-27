@@ -25,7 +25,7 @@
 
           <ul class="nav navbar-top-links navbar-right">
 
-                <li class="dropdown">
+                <!-- <li class="dropdown">
                 <style>
                 #woo{
                     overflow: auto;
@@ -38,35 +38,35 @@
                     <ul class="dropdown-menu dropdown-messages" id="woo">
                         <li>
                            <?php
-                           $sql = mysqli_query($conn,'SELECT * FROM message');
-                        while($row = mysqli_fetch_array($sql)){
-                            echo  "<a href='#'>";
-                               echo "<div>";
-                                    echo "<strong>";
-
-                                        echo $row['fullName'];
-
-                                    echo "</strong>";
-                                   echo "<span class='pull-right text-muted'>
-                                        <em>";
-
-                                        echo $row['msgdate'];
-
-                                    echo "</em>
-                                    </span>
-                                </div>";
-                                echo "<div>";
-
-                                        echo $row['message'];
-
-                                    echo "</div> </a>";
-                                }
+                        //    $sql = mysqli_query($conn,'SELECT * FROM message');
+                        // while($row = mysqli_fetch_array($sql)){
+                        //     echo  "<a href='#'>";
+                        //        echo "<div>";
+                        //             echo "<strong>";
+                        //
+                        //                 echo $row['fullName'];
+                        //
+                        //             echo "</strong>";
+                        //            echo "<span class='pull-right text-muted'>
+                        //                 <em>";
+                        //
+                        //                 echo $row['msgdate'];
+                        //
+                        //             echo "</em>
+                        //             </span>
+                        //         </div>";
+                        //         echo "<div>";
+                        //
+                        //                 echo $row['message'];
+                        //
+                        //             echo "</div> </a>";
+                        //         }
                             ?>
                         </li>
 
                     </ul>
                     <!-- /.dropdown-user -->
-                </li>
+                <!-- </li>  -->
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -82,8 +82,8 @@
                           echo "<li><a href='deleteaccount.php'><i class='fa fa-user-times fa-fw'></i> Remove User</a>
                           </li>";
                         } ?>
-                        <li><a href="message.php"><i class="fa fa-commenting fa-fw"></i> Leave message</a>
-                        </li>
+                        <!-- <li><a href="message.php"><i class="fa fa-commenting fa-fw"></i> Leave message</a>
+                        </li> -->
                         <li class="divider"></li>
                         <li><a href="logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
