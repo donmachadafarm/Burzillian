@@ -1,6 +1,5 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
-
       if (!isset($_SESSION['userType']) || $_SESSION['userType']!=101){
         echo "<script>window.location='logout.php'</script>";
       }
@@ -28,7 +27,6 @@
                         <!--php code-->
 
                         <?php
-
                             echo '<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
@@ -41,35 +39,33 @@
                                 </thead>
                                 <tbody>';
                                 $query=
-"SELECT PR.salesDate as 'date', S.prodName as 'product',(S.subTotal / S.quantity) as 'price', S.quantity as 'quantity', S.subTotal as 'subTotal'
-FROM productreceipt PR
-JOIN products_sales_receipt S
-ON PR.receiptID = S.receiptID
-WHERE PR.salesDate BETWEEN
+"SELECT S.salesDate as date, S.salesID, R.salesID, R.prodName as product, R.quantity, R.subTotal, (R.subTotal / R.quantity) AS price
+FROM receipt R
+JOIN sales_order S
+ON R.salesID = S.salesID
+WHERE S.salesDate BETWEEN
 '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
-GROUP BY S.prodName, PR.salesDate;";
+GROUP BY R.prodName, S.salesDate;";
                                 $result=mysqli_query($conn,$query);
-
                                 while($row=mysqli_fetch_array($result)){
+                                    $price = $row['price'];
                                     echo '<tr>';
                                         echo "<td>{$row['date']}</td>";
                                         echo "<td>{$row['product']}</td>";
-                                        echo "<td>{$row['price']}</td>";
+                                        echo "<td>";
+                                        echo number_format($price,2);
                                         echo "<td>{$row['quantity']}</td>";
                                         echo "<td>{$row['subTotal']}</td>";
                                     echo '</tr>';
-
                                 }
-
                             echo '</tbody>
                                 </table>';
                                 $query1=
 "SELECT SUM(PR.totalPrice) AS 'total'
-FROM productreceipt PR
+FROM sales_order PR
 WHERE PR.salesDate BETWEEN
 '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."';";
                                 $result1=mysqli_query($conn,$query1);
-
                             echo '<div style="font-weight:bold;font-size:20px;display: flex; justify-content: center;">';
                                 echo '<label>Total Income:&nbsp;</label>';
                                 while($row=mysqli_fetch_array($result1)){

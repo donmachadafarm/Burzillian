@@ -1,6 +1,5 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
-
       if (!isset($_SESSION['userType']) || $_SESSION['userType']!=101){
         echo "<script>window.location='logout.php'</script>";
       }
@@ -47,12 +46,10 @@
                         </form>
                         </div>
                         <?php
-
                             echo '<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Quantity</th>
                                         <th>Total Income</th>
                                         <th>Generate Report</th>
                                     </tr>
@@ -65,28 +62,22 @@
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
                                     $query =
-"SELECT '.$date.' as 'date', COUNT(PR.receiptID) AS 'quantity', SUM(PR.totalPrice) as 'income'
-FROM productreceipt PR
-WHERE PR.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}';";
+                                    "SELECT '.$date.' as 'date', SUM(S.totalPrice) as 'income', S.salesDate
+                                    FROM sales_order S
+                                    WHERE S.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}';";
                                     $result=mysqli_query($conn,$query);
                                     while($row=mysqli_fetch_array($result)){
                                     echo '<tr">';
                                         echo "<td>{$row['date']}</td>";
-                                        echo "<td>{$row['quantity']}</td>";
                                         echo "<td>{$row['income']}</td>";
                                         echo '<td style = "display: flex; justify-content: space-around;">';
                                                 echo "<a href = 'viewSalesReport.php'>View Report</a>";
                                         echo'</td>';
                                     echo '</tr>';
                                     };
-
                                 }
-
-
                             echo '</tbody>
                                 </table>';
-
-
                         ?>
 
                             <!-- /.table-responsive -->
