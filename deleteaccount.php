@@ -1,13 +1,10 @@
 <?php
 include 'includes/sections/header.php';
-
 if ($_SESSION['userType']!=101)
        header("Location:logout.php");
-
 if (isset($_POST['remove'])){
   $deletedaccount = $_POST['userID'];
   $query = "DELETE FROM users WHERE userID = '$deletedaccount'";
-
   if (mysqli_query($conn,$query)) {
     echo "<script> alert('Succesfully removed account!');
         </script>";
@@ -15,9 +12,7 @@ if (isset($_POST['remove'])){
     echo "di gumana<br>";
   }
 }/*End of main Submit conditional*/
-
 include 'includes/sections/navbar.php';
-
 ?>
 
 
@@ -48,17 +43,13 @@ include 'includes/sections/navbar.php';
                                       </thead>
                                       <tbody>
                                   <?php
-
                                   $sql1 = "SELECT * FROM users WHERE userType != '101'";
                                   $query1 = mysqli_query($conn,$sql1);
-
                                   while ($result = mysqli_fetch_array($query1,MYSQLI_ASSOC)) {
-
-
                                    ?>
                                         <tr>
                                           <td><?php echo $result['userID']; ?></td>
-                                          <td><?php echo $result['username']; ?></td>
+                                          <td><?php echo $result['userName']; ?></td>
                                         </tr>
                                   <?php } ?>
                                       </tbody>
@@ -73,9 +64,24 @@ include 'includes/sections/navbar.php';
                                     <div class="form-group">
                                       <div class="form-row">
                                         <div class="col-md-8">
-                                          <label for="exampleInputName">User ID</label>
-                                          <input name="userID" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter UserID" required>
-                                          <br />
+                                           <label class="control-label"  for="userID">UserID:</label>
+                                          <select name ="userID" class="form-control">
+                                          <?php
+                                            $flag=0;
+                                            $i = 1;
+
+                                            $result = mysqli_query($conn, 'SELECT * FROM users');
+
+                                            while($row = mysqli_fetch_array($result)){
+
+                                              $userID = $row['userID'];
+                                              echo "<label><option value = \"{$userID}\"/>{$row['userName']}</label>";
+
+                                              }
+
+                                            ?>
+                                          </select><br><br>
+                                          </div><div>
                                         </div>
                                         <div class="col-md-8">
                                           <input name="remove" type="submit" value="Remove" class="btn btn-danger btn-block">
