@@ -63,7 +63,6 @@
                         //         }
                             ?>
                         </li>
-
                     </ul>
                     <!-- /.dropdown-user -->
                 <!-- </li>  -->
@@ -100,6 +99,16 @@
                         <li>
                             <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
+
+                         <?php if ($_SESSION['userType'] == 101): ?>
+                            <li>
+                              <a href="#"><i class="fa fa-sitemap fa-fw"></i> Inventory<span class="fa arrow"></span></a>
+                              <ul class="nav nav-second-level">
+                              <li>
+                                <a href="converter.php">Add Conversion</a>
+                              </li>
+                              </ul>
+                                 <?php endif; ?>
                         <?php if ($_SESSION['userType'] == 102): ?>
                           <li>
                               <a href="#"><i class="fa fa-sitemap fa-fw"></i> Inventory<span class="fa arrow"></span></a>
@@ -109,12 +118,6 @@
                                   </li>
                                   <li>
                                       <a href="inputphysical.php">Input Physical Count</a>
-                                  </li>
-                                  <li>
-                                      <a href="converter.php">Add Conversion</a>
-                                  </li>
-                                  <li>
-                                      <a href="convertvalue.php">Converter</a>
                                   </li>
                                   </ul>
 
@@ -129,9 +132,6 @@
                                   </li>
                                   <li>
                                       <a href="recipeList.php">Recipe List</a>
-                                  </li>
-                                  <li>
-                                      <a href="addRecipe.php">Add Recipe</a>
                                   </li>
                                   </ul>
                             </li>
@@ -164,19 +164,23 @@
                                            <li>
                                                <a href='addsalesorder.php'>Add Sales Order</a>
                                            </li>";
+                                  }else if($_SESSION['userType'] == 101){
+
+                                        echo"<li>
+                                       <a href='#''><i class='fa fa-sitemap fa-fw'></i> Products<span class='fa arrow'></span></a>
+                                       <ul class='nav nav-second-level'><li>
+                                               <a href='changeprice.php'>Change Product Price</a>
+                                           </li>
+                                              <li>
+                                               <a href='addProducts.php'>Add Products</a>
+                                           </li>
+                                           </ul>";
                                   }else if ($_SESSION['userType']==102){
                                     echo "<li>
                                        <a href='#''><i class='fa fa-sitemap fa-fw'></i> Products<span class='fa arrow'></span></a>
                                        <ul class='nav nav-second-level'>
                                            <li>
-                                               <a href='addProducts.php'>Add Products</a>
-                                           </li>
-                                           <li>
                                                <a href='viewProducts.php'>View Products</a>
-                                           </li>
-
-                                           <li>
-                                               <a href='changeprice.php'>Change Product Price</a>
                                            </li>
                                        </ul>
                                    </li>";
@@ -190,9 +194,6 @@
                                     <li>
                                         <a href='rawmaterialforecast.php'>Inventory and Sales Forecast</a>
                                     </li>
-
-
-
                             </ul>
                             </li>";
                         } ?>
