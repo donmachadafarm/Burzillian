@@ -1,7 +1,7 @@
 <?php include 'includes/sections/header.php'; ?>
 
 <?php
- if (!isset($_SESSION['usertype']))
+ if (!isset($_SESSION['userType']))
         header("Location:logout.php");
 ?>
 

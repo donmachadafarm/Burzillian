@@ -1,7 +1,7 @@
 <?php
 include 'includes/sections/header.php';
 
-if ($_SESSION['usertype']!=101)
+if ($_SESSION['userType']!=101)
        header("Location:logout.php");
 
 $flag=0;
@@ -43,7 +43,7 @@ if (empty($_POST['contactno'])){
   $address=$_POST['address'];
 
 
- $usertype = $_POST['usertype'];
+ $userType = $_POST['userType'];
 
 $query = "SELECT userID FROM users where username = '$username'";
 $result=mysqli_query($conn,$query);
@@ -54,7 +54,7 @@ $message = "<b><p>Username already exists!";
 
 if(!isset($message)){
 
-$query="insert into users (username,password,fullName,address,contactNo,usertype) values ('{$username}','{$password}','{$fullname}','{$address}','{$contactno}','{$usertype}')";
+$query="insert into users (username,password,fullName,address,contactNo,userType) values ('{$username}','{$password}','{$fullname}','{$address}','{$contactno}','{$userType}')";
 if (mysqli_query($conn,$query)) {
   $message="<b><p>Username: {$username}<br>Fullname: {$fullname}<br>Contact Number: {$contactno}<br>Address: {$address}<br> SUCCESSFUL! </b>";
   $flag=1;
@@ -106,8 +106,8 @@ include 'includes/sections/navbar.php';
 </br>
 <label>Address: </label> </br><input type="text" name="address" class="form-control" value="<?php if (isset($_POST['address']) && !$flag) echo $_POST['address']; ?>"/>
     </p>
-<label>Usertype: </label>
-<select class="form-control" name="usertype" required>
+<label>userType: </label>
+<select class="form-control" name="userType" required>
   <option value="102" selected>Kitchen Staff</option>
   <option value="103">Cashier</option>
 </select><br>

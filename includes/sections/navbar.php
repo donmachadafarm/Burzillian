@@ -76,7 +76,7 @@
                         <li>
                           <p><i class="fa fa-user fa-fw"></i> <?php echo $_SESSION['name']; ?></p>
                         </li>
-                        <?php if ($_SESSION['usertype']==101) {
+                        <?php if ($_SESSION['userType']==101) {
                           echo "<li><a href='addnewaccount.php'><i class='fa fa-user-plus fa-fw'></i> Add New User</a>
                           </li>";
                           echo "<li><a href='deleteaccount.php'><i class='fa fa-user-times fa-fw'></i> Remove User</a>
@@ -100,7 +100,7 @@
                         <li>
                             <a href="index.php"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <?php if ($_SESSION['usertype'] == 102): ?>
+                        <?php if ($_SESSION['userType'] == 102): ?>
                           <li>
                               <a href="#"><i class="fa fa-sitemap fa-fw"></i> Inventory<span class="fa arrow"></span></a>
                               <ul class="nav nav-second-level">
@@ -138,7 +138,7 @@
                         <?php endif; ?>
 
                                 <?php
-                                  if ($_SESSION['usertype'] == 101) {
+                                  if ($_SESSION['userType'] == 101) {
                                     echo "<li>
                                            <a href='#'><i class='fa fa-sitemap fa-fw'></i> Reports<span class='fa arrow'></span></a>
                                            <ul class='nav nav-second-level'>
@@ -159,12 +159,12 @@
                                   }
                                  ?>
                                  <?php
-                                  if ($_SESSION['usertype'] == 103) {
+                                  if ($_SESSION['userType'] == 103) {
                                     echo "
                                            <li>
                                                <a href='addsalesorder.php'>Add Sales Order</a>
                                            </li>";
-                                  }else if ($_SESSION['usertype']==102){
+                                  }else if ($_SESSION['userType']==102){
                                     echo "<li>
                                        <a href='#''><i class='fa fa-sitemap fa-fw'></i> Products<span class='fa arrow'></span></a>
                                        <ul class='nav nav-second-level'>
@@ -183,7 +183,7 @@
                                   }
                                   ?>
 
-                        <?php if ($_SESSION['usertype'] == 101) {
+                        <?php if ($_SESSION['userType'] == 101) {
                             echo "<li>
                                 <a href='#'><i class='fa fa-sitemap fa-fw'></i> Forecasting<span class='fa arrow'></span></a>
                                 <ul class='nav nav-second-level'>

@@ -65,22 +65,22 @@ $message=NULL;
       $result = mysqli_query($conn,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
   /** Proceed to dashboard of kitchen employee **/
-if ($row["usertype"]==102) {
-       $_SESSION['usertype']=102;
+if ($row["userType"]==102) {
+       $_SESSION['userType']=102;
        $_SESSION['name']=$row["fullName"];
        $_SESSION['userid']=$row["userID"];
        header("Location: http://".$_SERVER['HTTP_HOST'].  dirname($_SERVER['PHP_SELF'])."/index.php");
 }
 // Proced to dashboard of cashier employee
-if ($row["usertype"]==103) {
-       $_SESSION['usertype']=103;
+if ($row["userType"]==103) {
+       $_SESSION['userType']=103;
        $_SESSION['name']=$row["fullName"];
        $_SESSION['userid']=$row["userID"];
        header("Location: http://".$_SERVER['HTTP_HOST'].  dirname($_SERVER['PHP_SELF'])."/index.php");
 }
 /** Proceed to dashboard of admin **/
-else if ($row["usertype"]==101)
-{      $_SESSION['usertype']=101;
+else if ($row["userType"]==101)
+{      $_SESSION['userType']=101;
        $_SESSION['name']=$row["fullName"];
        $_SESSION['userid']=$row["userID"];
        header("Location: http://".$_SERVER['HTTP_HOST'].  dirname($_SERVER['PHP_SELF'])."/index.php");

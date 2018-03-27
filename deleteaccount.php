@@ -1,7 +1,7 @@
 <?php
 include 'includes/sections/header.php';
 
-if ($_SESSION['usertype']!=101)
+if ($_SESSION['userType']!=101)
        header("Location:logout.php");
 
 if (isset($_POST['remove'])){
@@ -49,7 +49,7 @@ include 'includes/sections/navbar.php';
                                       <tbody>
                                   <?php
 
-                                  $sql1 = "SELECT * FROM users WHERE usertype != '101'";
+                                  $sql1 = "SELECT * FROM users WHERE userType != '101'";
                                   $query1 = mysqli_query($conn,$sql1);
 
                                   while ($result = mysqli_fetch_array($query1,MYSQLI_ASSOC)) {

@@ -1,6 +1,6 @@
                     <?php
 session_start();
-require 'connect.php';
+// require 'connect.php';
 
 ?>
 
@@ -24,17 +24,17 @@ if (isset($_POST['cash']))
  $cash = $_POST['cash'];
 
 $subTotal_array = [];
- if($number > 0) 
- {  
+ if($number > 0)
+ {
     $total = 0;
-for($i=0; $i<$number; $i++) 
+for($i=0; $i<$number; $i++)
 {
 $subTotal = 0;
  $sql = "SELECT prodName, price FROM product";
 $result=mysql_query($sql);
 
   if ($result){
-  //$result is 0 
+  //$result is 0
 
   while($row = mysql_fetch_array($result))
   {
@@ -47,7 +47,7 @@ $result=mysql_query($sql);
     if($row['prodName'] == $name[$i]){
   $subTotal += ($row['price'] * $quantity[$i]);
 
- 
+
   $subTotal_array[$i] = $subTotal;
 
   $total += $subTotal;
@@ -56,7 +56,7 @@ $result=mysql_query($sql);
 
   }//end if conditional
 
- 
+
 }//end for conditional
 
 
@@ -78,7 +78,7 @@ for ($i = 0; $i < $number; $i++)
 
 echo "\n\n\nTotal:  $total";
 echo "\n\nCash:     $cash";
-echo "\nChange:     $cash_change"; 
+echo "\nChange:     $cash_change";
 
 if ($cash_change < 0)
 {
@@ -93,5 +93,3 @@ if ($quantity_error == 1)
 }
 
               ?>
-
-
