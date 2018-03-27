@@ -34,11 +34,11 @@ include 'includes/sections/navbar.php';
 
                                   <!-- BODY/CONTENT -->
                                   <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                       <thead>
                                         <tr>
-                                          <th>User ID</th>
                                           <th>Username</th>
+                                          <th>Full name</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -48,8 +48,8 @@ include 'includes/sections/navbar.php';
                                   while ($result = mysqli_fetch_array($query1,MYSQLI_ASSOC)) {
                                    ?>
                                         <tr>
-                                          <td><?php echo $result['userID']; ?></td>
                                           <td><?php echo $result['userName']; ?></td>
+                                          <td><?php echo $result['fullName']; ?></td>
                                         </tr>
                                   <?php } ?>
                                       </tbody>
@@ -64,18 +64,18 @@ include 'includes/sections/navbar.php';
                                     <div class="form-group">
                                       <div class="form-row">
                                         <div class="col-md-8">
-                                           <label class="control-label"  for="userID">UserID:</label>
+                                           <label class="control-label"  for="userID">Employee name:</label>
                                           <select name ="userID" class="form-control">
                                           <?php
                                             $flag=0;
                                             $i = 1;
 
-                                            $result = mysqli_query($conn, 'SELECT * FROM users');
+                                            $result = mysqli_query($conn, "SELECT * FROM users WHERE userType!=101");
 
                                             while($row = mysqli_fetch_array($result)){
 
                                               $userID = $row['userID'];
-                                              echo "<label><option value = \"{$userID}\"/>{$row['userName']}</label>";
+                                              echo "<label><option value = \"{$userID}\"/>{$row['fullName']}</label>";
 
                                               }
 
