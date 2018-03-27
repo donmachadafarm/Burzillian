@@ -41,7 +41,7 @@
                                                         $query2 = mysqli_query($conn,"select * FROM converter WHERE convertID = $mId");
 
                                                         while($rowMes=mysqli_fetch_array($query2)){
-                                                            echo "<td style= \"text-align:center\">{$val}&nbsp;{$rowMes['convert_from']}</td>";
+                                                            echo "<td style= \"text-align:center\">{$val}&nbsp;{$rowMes['convertFrom']}</td>";
                                                         }
 
                                                     echo '</tr>';

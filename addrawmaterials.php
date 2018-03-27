@@ -124,10 +124,10 @@
 
         while($row = mysqli_fetch_array($result)){
 
-            $convert_from = $row['convert_from'];
-            $convert_to = $row['convert_to'];
+            $convert_from = $row['convertFrom'];
+            $convert_to = $row['convertTo'];
 
-             echo "<label><option value = \"{$row['convert_from']}\"/>{$row['convert_from']}</label>";
+             echo "<label><option value = \"{$row['convertFrom']}\"/>{$row['convertFrom']}</label>";
              echo "<br>";
         }
 

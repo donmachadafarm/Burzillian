@@ -45,7 +45,7 @@
 
             $rmName = $row['rmName'];
 
-            $measurement_value = $row['measurement_value'];
+            $measurement_value = $row['measurementValue'];
             $measurement = $row['measurement'];
             $ingID = $row['ingID'];
 

@@ -75,7 +75,7 @@
              echo "<label><input name = \"rmID\" type = \"checkbox\" value = \"{$row['rmID']}\"/>{$row['rmName']}</label>";
              echo "</div>";
                                                     $_SESSION['type'] = $row['measurement'];
-                                                    $_SESSION['val'] = $row['measurement_value'];
+                                                    $_SESSION['val'] = $row['measurementValue'];
                                                 }
                                                 echo '</select>'
                                             ?>  -->

@@ -1,7 +1,7 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
 
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=102){
+      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=101){
         echo "<script>window.location='logout.php'</script>";
       }
  ?>
@@ -43,8 +43,8 @@
 
                                         <tr>
                                             <td><?php echo $row['convertID']?></td>
-                                            <td><?php echo $row['convert_from']?></td>
-                                            <td><?php echo $row['convert_to']?></td>
+                                            <td><?php echo $row['convertFrom']?></td>
+                                            <td><?php echo $row['convertTo']?></td>
 
                                         </tr>
                                      <?php endwhile ?>
@@ -113,7 +113,7 @@ $message=NULL;
 
 
 if(!isset($message)){
-$query="insert into converter (convert_from,convert_to,convert_value) values ('{$convertfrom}','{$convertto}','{$convertvalue}')";
+$query="insert into converter (convertFrom,convertTo,convertValue) values ('{$convertfrom}','{$convertto}','{$convertvalue}')";
 $result=mysqli_query($conn,$query);
 $message="<b>INPUT SUCCESSFUL! </b>";
 

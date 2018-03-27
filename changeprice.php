@@ -1,7 +1,7 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
 
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=102){
+      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=101){
         echo "<script>window.location='logout.php'</script>";
       }
  ?>
