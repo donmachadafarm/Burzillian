@@ -30,7 +30,7 @@
                                       <th>Quantity</th>
                                       </tr>
                                       <?php
-                                          $sql = mysqli_query($conn,'SELECT * from inventory');
+                                          $sql = mysqli_query($conn,'SELECT * from inventory ORDER BY ingID ASC, rmID ASC');
 
                                           $i = 0;
                                           while($row = mysqli_fetch_array($sql)){
@@ -92,38 +92,53 @@
              // looping through count of all ingredients in inventory table listed in input physical
              for($i=0; $i<$count; $i++)
               {
-                  $resu = mysqli_query($conn,"SELECT * FROM inventory WHERE ingID = '$ingID[$i]'");
-                  $computedvalue = 0;
-                  $rowd = mysqli_fetch_array($resf);
-                  if ($quantity[$i] > 0) {
+                  $resu = mysqli_query($conn,"SELECT * FROM inventory WHERE ingID='$ingID[$i]' ORDER BY ingID ASC, rmID ASC");
+
                     if ($resu->num_rows > 1) {
                       // for repeating ingID's
+                      $rowd = mysqli_fetch_array($resf);
+                      $computedvalue = 0;
+                      // loops thru all inventories having the same ingID
                       for ($j=0; $j < $resu->num_rows; $j++) {
-                        $row = mysqli_fetch_array($resu);
-                        $tempcount = $quantity[$j] * $row['measurement_value'];
+                        $row=mysqli_fetch_array($resu);
+                        $tempcount = $quantity[$i] * $row['measurementValue'];
                         $computedvalue = $computedvalue + $tempcount;
+                        // echo $computedvalue." repeating ids ".$row['rmName']." ingID->".$row['ingID']." {QUANj}->".$quantity[$j]." {QUANi}->".$quantity[$i]."<br>";
+                        $i++;
                       }
-                      if ($computedvalue!=$rowd['total']) {
-                        $temp = $computedvalue - $rowd['total'];
-                        $iding = $rowd['ingID'];
-                        $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
-                        $resulta = mysqli_query($conn,$sql);
-                      }
+                      // magic combo powers next line
+                      $i -= $resu->num_rows-1;
 
-                      $i += $resu->num_rows-1;
-                    }
-                    else {
-                      // for non repeating ingID
-                      $row = mysqli_fetch_array($resu);
-                      $computedvalue = $quantity[$i] * $row['measurement_value'];
+                      //same sa baba checker for discrepancy using computedvalue and total
                       if ($computedvalue!=$rowd['total']) {
-                        $temp = $computedvalue - $rowd['total'];
+                        $temp = $rowd['total'] - $computedvalue;
                         $iding = $rowd['ingID'];
-                        $sql = "INSERT INTO discrepancy(ingredientID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
-                        $resulta = mysqli_query($conn,$sql);
+                        // inserting into db discrepancy
+                        $sql = "INSERT INTO discrepancy(ingID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
+                        if ($resulta = mysqli_query($conn,$sql)) {
+                          echo "<script> alert('Discrepancies Found!');
+                                </script> ";
+                        }
+                      }
+                    }else{
+                      // for non repeating ingID
+                      $computedvalue = 0;
+                      $row = mysqli_fetch_array($resu);
+                      $rowd = mysqli_fetch_array($resf);
+                      $computedvalue = $quantity[$i] * $row['measurementValue'];
+                      // echo $computedvalue." nonrepeating ids ".$row['rmName']." ingID->".$row['ingID']." QUAN->".$quantity[$i]."<br>";
+
+                      if ($computedvalue!=$rowd['total']) {
+                        $temp = $rowd['total'] - $computedvalue;
+                        $iding = $rowd['ingID'];
+                        $sql = "INSERT INTO discrepancy(ingID, discrepancyCount, checkerUser, checkedDate) VALUES('$iding','$temp','$userID','$date')";
+                        if ($resulta = mysqli_query($conn,$sql)) {
+                          echo "<script> alert('Discrepancies Found!');
+                                </script> ";
+                        }
                       }
                     }
-                  }
+
 
                   // next code
               }//end of for loop

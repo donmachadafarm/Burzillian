@@ -47,10 +47,10 @@
 
 	else{
 		$query = "SELECT *
-				FROM converter WHERE convert_from = '$measurement' ";
+				FROM converter WHERE convertFrom = '$measurement' ";
 		$result=mysqli_query($conn,$query);
 		$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
-		$measurement = $row['convert_to'];
+		$measurement = $row['convertTo'];
 
 	}
 	}
@@ -67,10 +67,10 @@
 
 	else{
 			$query1 = "SELECT *
-				FROM converter WHERE convert_from = '$temp' ";
+				FROM converter WHERE convertFrom = '$temp' ";
 		$result1=mysqli_query($conn,$query1);
 		$row1=mysqli_fetch_array($result1,MYSQLI_ASSOC);
-		$temp1 = $row1['convert_value'];
+		$temp1 = $row1['convertValue'];
 	$measurement_value = $measurement_value * $temp1;
 
 	}
@@ -79,7 +79,7 @@
   $quantity = 0;
 
 
-    $sql1 = " INSERT INTO inventory(rmName, measurement_value, measurement, ingID)
+    $sql1 = " INSERT INTO inventory(rmName, measurementValue, measurement, ingID)
             VALUES ('$rmName', '$measurement_value', '$measurement', '$ingID'); ";
 
 
@@ -87,7 +87,7 @@
         if($flag != 1){
     $result = mysqli_query($conn,$sql1);
         if (!$result){
-          die('Invalid Input: ' . mysqli_error().$sql);
+          die('Invalid Input: ' . mysqli_error().$sql1);
         }
         else{
           echo "<script> alert('Successfully Added');

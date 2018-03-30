@@ -71,7 +71,8 @@
 
                                 // not yet updated if button is clicked
                                 if(isset($_POST['submit'])){
-                                    $dt1 = $_POST['datetimepicker'];
+                                    $dt1 = new DateTime($_POST['datetimepicker']);
+                                    $_SESSION['datedisc'] = $dt1->format('Y-m-d');
                                     // $_SESSION['from_date_desc'] = $dt1->format('Y-m-d');
                                     // $query ="SELECT inventory.rmName as 'rawname', sum(inventory.quantity) as 'quantity',
                                     //         input_physical_count.date as 'display_day', sum(input_physical_count.quantity) as 'counted',
@@ -87,9 +88,9 @@
 
                                     $query = "SELECT ingredient.ingName AS 'ingname', discrepancy.discrepancyCount AS 'count', users.fullName AS 'user', discrepancy.checkedDate AS 'date'
                                             FROM discrepancy
-                                            JOIN ingredient ON discrepancy.ingredientID = ingredient.ingID
+                                            JOIN ingredient ON discrepancy.ingID = ingredient.ingID
                                             JOIN users ON discrepancy.checkerUser = users.userID
-                                            WHERE discrepancy.checkedDate = '$dt1'
+                                            WHERE discrepancy.checkedDate = '{$_SESSION['datedisc']}'
                                             ORDER BY discrepancy.checkedDate ASC";
 
                                     if ($result=mysqli_query($conn,$query)) {
