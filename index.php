@@ -39,44 +39,40 @@
                 ?>
                 <!-- Ingredient warning side -->
                 <div class="col-lg-6">
-                    <div class="panel panel-danger">
-                        <div class="panel-heading">
-                            Ingredient warning
-                        </div>
-                        <div class="panel-body">
+                            <h3>Ingredient warning</h3>
                         <?php
                           while($row = mysqli_fetch_array($res)){
-                              echo "<div class='alert alert-danger'>Ingredient ".$row['ingName']." count is 0</div>";
+                            echo "<div class='alert alert-danger alert-dismissable'>
+                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                    Ingredient ". $row['ingName'] . " count is now 0
+                                  </div>";
                           }
                         ?>
-                        </div>
-                    </div>
                   </div>
                 <?php } ?>
 
 
                 <?php
-                $query = "SELECT discrepancy.discrepancyCount AS 'count', discrepancy.checkedDate AS 'date', ingredient.ingName AS 'ingName'
+                $query = "SELECT discrepancy.discrepancyCount AS 'count',
+                                 discrepancy.checkedDate AS 'date',
+                                 ingredient.ingName AS 'ingName'
                           FROM discrepancy
-                          INNER JOIN ingredient discrepancy.ingID ON ingredient.ingID
+                          JOIN ingredient ON discrepancy.ingID = ingredient.ingID
                           ORDER BY discrepancy.checkedDate DESC
                           LIMIT 5";
                 if($res = mysqli_query($conn,$query)){
                  ?>
                 <!-- Discrepancy side -->
                 <div class="col-lg-6">
-                    <div class="panel panel-warning">
-                        <div class="panel-heading">
-                            Discrepancies
-                        </div>
-                        <div class="panel-body">
+                    <h3>Discrepancy</h3>
                         <?php
                           while ($row = mysqli_fetch_array($res)) {
-                              echo "<div class='alert alert-danger'>Discrepancy on ".$row['ingName']." checked on ".$row['date']."</div>";
+                              echo "<div class='alert alert-danger alert-dismissable'>
+                                      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                                      Discrepancies on ". $row['ingName'] . " as checked last " . $row['date'] . "
+                                    </div>";
                           }
                          ?>
-                        </div>
-                    </div>
                 </div>
               <?php } ?>
 
