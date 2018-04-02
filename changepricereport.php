@@ -64,17 +64,17 @@
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
-                                    $query ="Select '$date' as date, old_price, new_price, product_id, date_edited
+                                    $query ="Select '$date' as date, oldPrice, newPrice, prodID, dateEdited
                                             from price_list
-                                            where date_edited BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
-                                            group by product_id
-                                            order by date_edited ASC;";
+                                            where dateEdited BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                            group by prodID
+                                            order by dateEdited ASC;";
 									$result=mysqli_query($conn,$query);
 
 
                                     while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
                                     echo '<tr">';
-										$productid = $row['product_id'];
+										$productid = $row['prodID'];
 										$query1="SELECT prodName
 											from product
 											where prodID = '$productid'";
@@ -82,9 +82,9 @@
 										$row1=mysqli_fetch_array($result1,MYSQLI_ASSOC);
 
                                         echo "<td>{$row1['prodName']}</td>";
-                                        echo "<td>{$row['old_price']}</a></td>";
-                                        echo "<td>{$row['new_price']}</td>";
-										echo "<td>{$row['date_edited']}</td>";
+                                        echo "<td>{$row['oldPrice']}</a></td>";
+                                        echo "<td>{$row['newPrice']}</td>";
+										echo "<td>{$row['dateEdited']}</td>";
 
                                         echo'</td>';
                                     echo '</tr>';
