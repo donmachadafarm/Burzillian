@@ -192,7 +192,7 @@
                                 <a href='#'><i class='fa fa-sitemap fa-fw'></i> Forecasting<span class='fa arrow'></span></a>
                                 <ul class='nav nav-second-level'>
                                     <li>
-                                        <a href='rawmaterialforecast.php'>Inventory and Sales Forecast</a>
+                                        <a href='rawmaterialforecast.php'>Inventory Forecast</a>
                                     </li>
                             </ul>
                             </li>";

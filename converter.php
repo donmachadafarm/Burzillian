@@ -30,7 +30,7 @@
                                         <tr>
                                             <th></th>
                                             <th>Convert From</th>
-                                            <th>Conver To</th>
+                                            <th>Convert To</th>
 
                                         </tr>
                                     </thead>

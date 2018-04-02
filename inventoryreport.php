@@ -91,7 +91,7 @@
                         ?>
 
                         <center> <a data-toggle="modal" href="#inventoryreport" class="btn btn-primary">View Report</a>
-                        <div class="modal fade" id="inventoryreport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal fade" id="inventoryreport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <form name="form1" id="form1" action="" class="form-signin" method="POST">
