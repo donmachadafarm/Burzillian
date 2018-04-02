@@ -47,6 +47,7 @@
                                 <tr>
                                     <th>Ingredient Name</th>
                                     <th>Discrepancy Count</th>
+                                    <th>Discrepancy Measurement</th>
                                     <th>Counted By:</th>
                                     <th>Date Counted</th>
                                 </tr>
@@ -86,7 +87,7 @@
                                     //           FROM input_physical_count
                                     //           WHERE input_physical_count.date = $_SESSION['from_date_desc']";
 
-                                    $query = "SELECT ingredient.ingName AS 'ingname', discrepancy.discrepancyCount AS 'count', users.fullName AS 'user', discrepancy.checkedDate AS 'date'
+                                    $query = "SELECT ingredient.ingName AS 'ingname', discrepancy.discrepancyCount AS 'count', users.fullName AS 'user', discrepancy.checkedDate AS 'date', ingredient.measurement AS 'measurement'
                                             FROM discrepancy
                                             JOIN ingredient ON discrepancy.ingID = ingredient.ingID
                                             JOIN users ON discrepancy.checkerUser = users.userID
@@ -102,6 +103,7 @@
                                           // echo "<td>{$row['fullname']}</td>";
                                           echo "<td>{$row['ingname']}</td>";
                                           echo "<td>{$row['count']}</td>";
+                                          echo "<td>{$row['measurement']}</td>";
                                           echo "<td>{$row['user']}</td>";
                                           echo "<td>{$row['date']}</td>";
                                       echo '</tr>';

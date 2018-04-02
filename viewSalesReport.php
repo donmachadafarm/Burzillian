@@ -45,7 +45,7 @@ JOIN sales_order S
 ON R.salesID = S.salesID
 WHERE S.salesDate BETWEEN
 '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
-GROUP BY R.prodName, S.salesDate;";
+ORDER BY product;";
                                 $result=mysqli_query($conn,$query);
                                 while($row=mysqli_fetch_array($result)){
                                     $price = $row['price'];
