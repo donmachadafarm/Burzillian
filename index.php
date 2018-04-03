@@ -34,7 +34,7 @@
             <div class="row">
 
               <?php
-              $query = "SELECT * FROM ingredient WHERE total = 0";
+              $query = "SELECT * FROM ingredient WHERE total = 0 ";
               if($res = mysqli_query($conn,$query)){
                 ?>
                 <!-- Ingredient warning side -->
