@@ -1,7 +1,7 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
 
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=103){
+            if (!isset($_SESSION['userType']) || $_SESSION['userType']!=103){
         echo "<script>window.location='logout.php'</script>";
       }
  ?>
@@ -107,9 +107,7 @@ echo '</select>';// Close drop down box
                                 <br><br>
 <center><hr>
                               <button type="submit" name = "submit" class="btn btn-default">Submit Order</button>
-                              <a data-toggle="modal" href="#addSalesOrder" class="btn btn-primary">View Orders</a>
 
-                               <button type="button" class="btn btn-success" onclick="myFunction()">Print this page</button></center>
                                <br>
 
                           </div>
@@ -222,7 +220,7 @@ $cash_change = $cash - $total;
 
 
 if ($cash_change >= 0 &&  $quantity_error == 0){
- $sql = "INSERT INTO sales_order(salesDate, totalPrice, Cash, Cash_Change) VALUES(NOW(),'$total', '$cash', '$cash_change')";
+ $sql = "INSERT INTO sales_order(salesDate, totalPrice, cash, cashChange) VALUES(NOW(),'$total', '$cash', '$cash_change')";
   mysqli_query($conn, $sql);
 
 // Calculate Total ()
@@ -234,13 +232,24 @@ if ($cash_change >= 0 &&  $quantity_error == 0){
       {
 
                 $sql = "INSERT INTO receipt(salesID, prodName, quantity, subTotal) VALUES((SELECT MAX(salesID) FROM sales_order), '$name[$i]', '$quantity[$i]', '$subTotal_array[$i]')";
-                mysqli_query($conn, $sql);
+
+        if($flag != 1){
+    $result = mysqli_query($conn,$sql);
+        if (!$result){
+          die('Invalid Input: ' . mysqli_error().$sql);
+        }
+        else{
+          echo "<script> alert('Successfully Added');
+                window.location.href='receipt.php';
+                </script> ";
+        }
+    }
 
       }
 
 $sql = mysqli_query($conn, "SELECT receipt.prodName, receipt.salesID , receipt.quantity AS receipt_quantity, sales_order.salesDate,
-recipe.recipeName, ingredient.ingID AS 'ingID', ingredient.ingName, converter.convert_from, converter.convert_to, recipeing.measureVal, ingredient.total,
-round(receipt.quantity*recipeing.converted_measurement, 3) AS 'subtract', round(ingredient.total - (receipt.quantity*recipeing.converted_measurement), 3) AS 'new_measurement'
+recipe.recipeName, ingredient.ingID AS 'ingID', ingredient.ingName, converter.convertFrom, converter.convertTo, recipeing.measureVal, ingredient.total,
+round(receipt.quantity*recipeing.convertedMeasurement, 3) AS 'subtract', round(ingredient.total - (receipt.quantity*recipeing.convertedMeasurement), 3) AS 'new_measurement'
 FROM recipe
 JOIN recipeing on recipe.recipeID = recipeing.recipeID
 JOIN product on recipe.prodID = product.prodID
@@ -258,6 +267,7 @@ $updateING = "UPDATE ingredient
 SET total = '{$row['new_measurement']}'
 WHERE ingID = '{$row['ingID']}';
 ";
+
 $result2=mysqli_query($conn, $updateING);
 }
 
@@ -286,113 +296,4 @@ else{
 
  ?>
 
-
-                        <div class="modal fade" id="addSalesOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <center>
-                <h2 class="modal-title">Sales Order</h2>
-
-                  <div class="modal-body">
-
-                  <?php echo date('Y-m-d');?>
-                  </header><br>
-
-
-                      <table width="100%" class="table table-striped table-bordered table-hover" >
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Raw Material</th>
-                                        <th>Quantity</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-
-                                 for ($i = 0; $i < $number; $i++)
-                                {
-                                  echo '<tr">';
-                                echo "<td>";
-                                echo $name[$i];
-                                echo "</td>    ";
-                                echo "<td>";
-                                echo $quantity[$i];
-                                echo "</td>   ";
-                                echo "<td>";
-                                echo $subTotal_array[$i];
-                                echo "</td>    ";
-                                echo '</tr>';
-
-                                }
-
-
-echo "<B>Total:  $total";
-  echo "<br>";
-echo "\n\nCash:     $cash";
-  echo "<br>";
-echo "\nChange:     $cash_change";
-  echo "<br>";
-
-                                ?>
-                                </tbody></table>
-
-                        <br><br>
-
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-            </div></center>
-
-
-        </div>
-        <!-- /#page-wrapper -->
-
-
-
-    </div>
-
-    <?php
-
-
-//converted_measurements is measureVal = convert_to
-
-//subtract = number of ingredients used
-//new_measurement = value of inventory after subtracting
-
-/*$sql = mysqli_query($conn, "SELECT receipt.prodName, receipt.salesID , receipt.quantity AS receipt_quantity, sales_order.salesDate,
-recipe.recipeName, ingredient.ingID, ingredient.ingName, converter.convert_from, converter.convert_to, recipeing.measureVal,
-inventory.rmName, inventory.measurement, inventory.measurement_value, inventory.quantity AS inventory_quantity,
-round(receipt.quantity*recipeing.converted_measurement, 3) AS 'subtract', round(inventory.measurement_value - (receipt.quantity*recipeing.converted_measurement), 3) AS 'new_measurement'
-FROM recipe
-JOIN recipeing on recipe.recipeID = recipeing.recipeID
-JOIN product on recipe.prodID = product.prodID
-JOIN receipt on receipt.prodName = product.prodName
-JOIN sales_order on receipt.salesID = sales_order.salesID
-JOIN ingredient on ingredient.ingID = recipeing.ingID
-JOIN converter on recipeing.measureID = converter.convertID
-JOIN inventory on inventory.ingID = ingredient.ingID
-WHERE  receipt.salesID = (SELECT MAX(receipt.salesID) FROM receipt)
-GROUP BY recipe.recipeID,ingredient.ingName,receipt.prodName, sales_order.salesDate;");
-
-
-while($row = mysqli_fetch_array($sql)){
-$i = 0;
-$subtract = $row['subtract'];
-while($subtract > 0)
-{
-  $subtract -=  $row['measurement_value'];
-  $i++;
-}
-
-$ingredientID = $row['ingID'];
-$new_quantity = $row['new_measurement'];
-$updateRM = "UPDATE inventory
-SET quantity = quantity - $i
-WHERE ingID = {$row['ingID']} AND quantity = {$row['inventory_quantity']};
-";
-$result2=mysqli_query($conn, $updateRM);
-
-}*/
-
-    ?>
 <?php include 'includes/sections/footer.php'; ?>

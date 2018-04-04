@@ -1,7 +1,6 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
-
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=102){
+            if (!isset($_SESSION['userType']) || $_SESSION['userType']!=102){
         echo "<script>window.location='logout.php'</script>";
       }
  ?>
@@ -46,6 +45,9 @@
                                     $ID = $row['ingID'];
                                     $measurement = $row['measurement'];
                                     $total = $row['total'];
+
+                                    if($total <= 0)
+                                        $total = 0;
 
                                     if($total > 0){
                                     echo '<tr class="recipe">';
