@@ -10,7 +10,8 @@
                                         <div class="form-group">
                                             <label>Select Tables to Display</label>
                                             <select name = "table_select" class="form-control" style="width: 300px;">
-                                              <option value="1" selected>Daily Sales Per Item</option>
+                                              <option selected>--Select table--</option>
+                                              <option value="1">Daily Sales Per Item</option>
                                               <option value="2">Total Sales Per Item</option>
                                               <option value="3">Weekly Forecast</option>
                                               <option value="4">Monthly Forecast</option>
@@ -122,7 +123,7 @@ $i = 0;
 if($display == 1){
 
 echo "<table class='table table-striped table-bordered table-hover'>";
- echo "<label>Daily Sales Per Item</label>";
+ echo "<label><h4>Now Showing: </h4>Daily Sales Per Item</label>";
 echo "<tr align = left>";
 
 echo "<th>Date</td>";
@@ -428,7 +429,9 @@ for($l = 0; $l < $h; $l++){
 
 
 }
+if ($display==6) {
 
+}
 
 
 ?>
