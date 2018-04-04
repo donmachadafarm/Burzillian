@@ -72,12 +72,12 @@ function calculate_median($arr) {
 //Get most recent date
 $most_recent_date = "";
 
-$sql = "SELECT MAX(salesDate) AS dateMax FROM sales_order";
-$result=mysqli_query($conn,$sql);
+$sqlz = "SELECT MAX(salesDate) AS dateMax FROM sales_order";
+$resultz=mysqli_query($conn,$sqlz);
 
 echo "<table>";
 
-while($row = mysqli_fetch_array($result)){
+while($row = mysqli_fetch_array($resultz)){
 
 $most_recent_date = $row['dateMax'];
 
@@ -121,15 +121,19 @@ if($result){
 
 $i = 0;
 if($display == 1){
-
-echo "<table class='table table-striped table-bordered table-hover'>";
- echo "<label><h4>Now Showing: </h4>Daily Sales Per Item</label>";
+  echo "<div class='col-lg-12'>";
+echo "<div class='panel panel-default'>";
+echo "<table class='table table-bordered table-hover' id='dataTables-example' width='100%' cellspacing='0'>";
+echo "<div class='panel-heading'>";
+ echo "<label><h4>Now Showing: Daily Sales Per Item</h4></label>";
+ echo "</div><div class='panel-body'>";
+ echo "<thead>";
 echo "<tr align = left>";
 
 echo "<th>Date</td>";
 echo "<th>Product Name</td>";
 echo "<th>Sales Volume</td>";
-echo "<th>Sales</td>";
+echo "<th>Sales</td></tr></thead><tbody>";
 }//end display conditional
 
 //Convert daily sales per item into multi array so calculate_median can be used effectively
@@ -155,7 +159,7 @@ $i++;
 }      //end if
 
 if ($display == 1)
-echo "</table>";
+echo "</tbody></table></div></div></div>";
 
 
 $median_quantity_array = [];
@@ -258,8 +262,10 @@ $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, 
   WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
   GROUP BY ingredient.ingName";
 
-
-echo "<table class='table table-striped table-bordered table-hover'>";
+echo "<div class='panel panel-default'>";
+echo "<table class='table table-striped table-bordered table-hover' id='dataTables-example'>";
+echo "<div class='panel-heading'><label><h4>Now showing: Monthly Forecast</h4> </label>";
+echo "<thead>";
 echo "<tr align = center>";
 
 
@@ -267,7 +273,7 @@ echo "<th>Ingredient Name</td>";
 echo "<th>Current Total Measurement Value</td>";
 echo "<th>Forecasted Needed Value Monthly</td>";
 
-echo "</tr>";
+echo "</tr></thead></div><div class='panel-body'>";
 
 $h = 0;
 $i = 0;
@@ -311,7 +317,7 @@ for($j; $j < $h; $j++){
       }
     }
 
-
+echo "<tbody>";
 for($l = 0; $l < $h; $l++){
 
  echo '<tr><td align="left">';
@@ -329,7 +335,7 @@ for($l = 0; $l < $h; $l++){
 }
 
 
-echo "</table>";
+echo "</tbody></table></div></div>";
 
 }
 
@@ -431,6 +437,103 @@ for($l = 0; $l < $h; $l++){
 }
 if ($display==6) {
 
+  $curyear = date('Y');
+  $curmonth = date('m');
+  $past1 = $curmonth - 1;
+  $past2 = $past1 - 1;
+
+  $query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
+    FROM receipt
+    JOIN sales_order ON sales_order.salesID = receipt.salesID
+    WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+    GROUP BY receipt.prodName";
+
+  $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+    FROM recipe
+    JOIN recipeing on recipe.recipeID = recipeing.recipeID
+    JOIN product on recipe.prodID = product.prodID
+    JOIN ingredient on ingredient.ingID = recipeing.ingID
+    JOIN converter on recipeing.measureID = converter.convertID
+    JOIN inventory on ingredient.ingID = inventory.ingID
+    JOIN receipt on product.prodName = receipt.prodName
+    JOIN sales_order on sales_order.salesID = receipt.salesID
+    WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+    GROUP BY ingredient.ingName";
+
+  echo "<div class='panel panel-default'>";
+  echo "<table class='table table-striped table-bordered table-hover' id='dataTables-example'>";
+  echo "<div class='panel-heading'><label><h4>Now showing: Monthly Forecast</h4> </label>";
+  echo "<thead>";
+  echo "<tr align = center>";
+
+
+  echo "<th>Ingredient Name</td>";
+  echo "<th>Current Total Measurement Value</td>";
+  echo "<th>Forecasted Needed Value Monthly</td>";
+
+  echo "</tr></thead></div><div class='panel-body'>";
+
+  $h = 0;
+  $i = 0;
+  $j = 0;
+  $product_name_array = [];
+  $ingredient_name_array = [];
+  $type_array = [];
+  $current_value_array = [];
+  $measurement_array = [];
+  $forecasted = [];
+
+  $prodName1 = [];
+  $count = [];
+  $result1=mysqli_query($conn,$query2);
+    while($row = mysqli_fetch_array($result1)){
+      $prodName1[$i] = $row['prodName'];
+      $count[$i] = $row['count'];
+
+      $i++;
+    }
+
+  $result=mysqli_query($conn,$query);
+  while($row = mysqli_fetch_array($result)){
+
+      $product_name_array[$h] = $row['prodName']; // product name
+      $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+         $type_array[$h] = $row['measurement']; // measurement type
+          $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+      $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+      $h++;
+  }
+
+  for($j; $j < $h; $j++){
+
+      for($k = 0; $k < $i; $k++){
+
+          if($product_name_array[$j] == $prodName1[$k])
+
+            $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 2;
+        }
+      }
+
+  echo "<tbody>";
+  for($l = 0; $l < $h; $l++){
+
+   echo '<tr><td align="left">';
+    echo $ingredient_name_array[$l];
+    echo '</td><td>';
+    echo number_format($current_value_array[$l],2);
+    echo '&nbsp';
+    echo $type_array[$l];
+    echo '</td><td>';
+    echo number_format($forecasted[$l],2);
+    echo '&nbsp';
+    echo $type_array[$l];
+    echo '</td>';
+    echo '</tr>';
+  }
+
+
+  echo "</tbody></table></div></div>";
 }
 
 
