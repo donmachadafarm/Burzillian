@@ -17,20 +17,6 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
-
-            <div class="row">
-                <!-- Forecasting side -->
-                <div class="col-lg-12">
-                  <div class="panel panel-info">
-                      <div class="panel-heading">
-                          Forecast
-                      </div>
-                      <div class="panel-body">
-                          forecast body
-                      </div>
-                  </div>
-                </div>
-            </div>
             <div class="row">
 
               <?php
@@ -39,18 +25,28 @@
                 ?>
                 <!-- Ingredient warning side -->
                 <div class="col-lg-6">
-                            <h3>Ingredient warning</h3>
-                        <?php
-                          while($row = mysqli_fetch_array($res)){
-                            echo "<div class='alert alert-danger alert-dismissable'>
-                                    <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                    Ingredient ". $row['ingName'] . " count is now 0
-                                  </div>";
-                          }
-                        ?>
-                  </div>
-                <?php } ?>
-
+                      <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                          <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-list-alt fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge"><?php echo $res->num_rows; ?></div>
+                                    <div>Ingredient Warnings!</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="ingredientList.php">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                      </div>
+                </div>
+              <?php } ?>
 
                 <?php
                 $query = "SELECT discrepancy.discrepancyCount AS 'count',
@@ -64,19 +60,76 @@
                  ?>
                 <!-- Discrepancy side -->
                 <div class="col-lg-6">
-                    <h3>Discrepancy</h3>
+                    <!-- <h3>Discrepancy</h3> -->
                         <?php
-                          while ($row = mysqli_fetch_array($res)) {
-                              echo "<div class='alert alert-danger alert-dismissable'>
-                                      <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                                      Discrepancies on ". $row['ingName'] . " as checked last " . $row['date'] . "
-                                    </div>";
-                          }
+                          // while ($row = mysqli_fetch_array($res)) {
+                          //     echo "<div class='alert alert-danger alert-dismissable'>
+                          //             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                          //             Discrepancies on ". $row['ingName'] . " as checked last " . $row['date'] . "
+                          //           </div>";
+                          // }
                          ?>
+                         <div class="panel panel-red">
+                           <div class="panel-heading">
+                             <div class="row">
+                                   <div class="col-xs-3">
+                                       <i class="fa fa-tasks fa-5x"></i>
+                                   </div>
+                                   <div class="col-xs-9 text-right">
+                                       <div class="huge"><?php echo $res->num_rows; ?></div>
+                                       <div>Discrepancy Warnings!</div>
+                                   </div>
+                               </div>
+                           </div>
+                           <a href="discrepancyTable.php">
+                               <div class="panel-footer">
+                                   <span class="pull-left">View Details</span>
+                                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                   <div class="clearfix"></div>
+                               </div>
+                           </a>
+                         </div>
                 </div>
               <?php } ?>
 
             </div>
+
+            <div class="row">
+                <!-- Forecasting side -->
+                <div class="col-lg-12">
+                  <div class="panel panel-default">
+                          <div class="panel-heading">
+                              <i class="fa fa-bar-chart-o fa-fw"></i> Forecasting Seasonal Chart
+                              <!-- <div class="pull-right">
+                                  <div class="btn-group">
+                                      <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                          Actions
+                                          <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu pull-right" role="menu">
+                                          <li><a href="#">Action</a>
+                                          </li>
+                                          <li><a href="#">Another action</a>
+                                          </li>
+                                          <li><a href="#">Something else here</a>
+                                          </li>
+                                          <li class="divider"></li>
+                                          <li><a href="#">Separated link</a>
+                                          </li>
+                                      </ul>
+                                  </div>
+                              </div> -->
+                          </div>
+                          <!-- /.panel-heading -->
+                          <div class="panel-body">
+                              <div id="morris-area-chart"></div>
+                          </div>
+                          <!-- /.panel-body -->
+                  </div>
+                </div>
+            </div>
+
+
 </div>
 
 <?php
