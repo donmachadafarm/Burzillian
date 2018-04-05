@@ -79,7 +79,7 @@
     $ingID = 0;
 
 
-    $sql2 = mysqli_query($conn, "SELECT inventory.ingID as inv_ID, ingredient.ingID AS ing_ID, inventory.measurement_value AS measurement_value, ingredient.total AS total, inventory.rmName AS inv_rmName FROM inventory, ingredient WHERE inventory.rmName = '{$rmName}' AND inventory.ingID = ingredient.ingID");
+    $sql2 = mysqli_query($conn, "SELECT inventory.ingID as inv_ID, ingredient.ingID AS ing_ID, inventory.measurementValue AS measurement_value, ingredient.total AS total, inventory.rmName AS inv_rmName FROM inventory, ingredient WHERE inventory.rmName = '{$rmName}' AND inventory.ingID = ingredient.ingID");
 
 
      while($row = mysqli_fetch_array($sql2)){
