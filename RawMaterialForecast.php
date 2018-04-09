@@ -14,7 +14,7 @@
                                         <div class="form-group">
                                             <label>Select Tables to Display</label>
                                             <select name = "table_select" class="form-control" style="width: 300px;">
-                                              <option selected>--Select table--</option>
+                                              <option selected value="0">--Select table--</option>
                                               <option value="1">Monthly Forecast</option>
 												                      <option value="2">Yearly Forecast</option>
 												                      <option value="3">Seasonal Forecast</option>
@@ -51,6 +51,9 @@ function calculate_median($arr) {
     return $median;
 } // end median function
 
+if ($display==0) {
+  echo "<h1 class='jumbotron' style='text-align:center'>Select from the dropdown</h1>";
+}
 
 /*
 
