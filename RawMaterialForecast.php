@@ -1,9 +1,5 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
-
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=101){
-        echo "<script>window.location='logout.php'</script>";
-      }
  ?>
 <div id="page-wrapper">
 
@@ -14,11 +10,18 @@
                                         <div class="form-group">
                                             <label>Select Tables to Display</label>
                                             <select name = "table_select" class="form-control" style="width: 300px;">
-                                              <option selected value="0">--Select table--</option>
                                               <option value="1">Monthly Forecast</option>
-												                      <option value="2">Yearly Forecast</option>
-												                      <option value="3">Seasonal Forecast</option>
-											                      </select>
+                                              <option value="2">Yearly Forecast</option>
+                                              <option value="3">Seasonal Forecast</option>
+                                        </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Select Forecasting Method</label>
+                                            <select name = "method" class="form-control" style="width: 300px;">
+                                              <option value="1">Simple Moving Average</option>
+                                              <option value="2">Exponential Smoothing</option>
+                                              <option value="3">Weighted Moving Average</option>
+                                        </select>
                                         </div>
 
                                              <button type="submit" name = "submit" class="btn btn-default">Display Table</button>
@@ -28,11 +31,29 @@
 
 <?php
 
-$display = 1;
+/*
+1. Get sales median per item | note : median = better if there are outliers | average = better if values are between two extremes (improbable)
+(e.g. 21 Burgers/day)
+>>> Get the mean/median of daily sales (Can be from current month, year or just get all daily sales)
+
+2. Multiply number of raw materials used as an ingredient to sales median
+(e.g. 2 cheese slices per burger | 2 * 21 = 42 Cheese slices/day)
+
+3. Add up all initial forecasts (per RM)
+
+4. Subtract current inventory from forecasted RM
+
+5. Retrieve final forecast (per RM)
+
+
+*/
+
+$display = 0;
 
 if (isset($_POST['submit']))
 {
     $display = $_POST['table_select'];
+    $method = $_POST['method'];
 }
 
 
@@ -51,21 +72,61 @@ function calculate_median($arr) {
     return $median;
 } // end median function
 
-if ($display==0) {
-  echo "<h1 class='jumbotron' style='text-align:center'>Select from the dropdown</h1>";
+//Calculate the average of array
+
+//Get most recent date
+$most_recent_date = "";
+
+$sql = "SELECT MAX(salesDate) AS dateMax FROM sales_order";
+$result=mysqli_query($conn,$sql);
+
+echo "<table>";
+
+while($row = mysqli_fetch_array($result)){
+
+$most_recent_date = $row['dateMax'];
+
+echo "<br>";
+
+/*if($display == 1){
+echo '<tr><td align="left">' .
+"Last order made was on ".$most_recent_date . '</td><td>' .
+
+'</tr>';
+}*/
 }
-
-/*
-
-
-
-            MONTHLY
+echo "</table>";
 
 
 
-*/
+//Get Daily Sales per Item
+ $sql = "SELECT  S.salesDate, R.prodName, SUM(R.quantity) AS quantity_sum , P.price, (P.price * SUM(R.quantity)) AS price_sum
+ FROM receipt R
+ LEFT JOIN sales_order S ON R.salesID = S.salesID
+ JOIN product P ON R.prodName = P.prodName
+ GROUP BY S.salesDate, R.prodName
+ ORDER BY R.prodName ";
 
-if($display ==1){
+$result=mysqli_query($conn,$sql);
+
+
+?>
+
+
+
+<?php
+
+$prodName_array = [];
+$unique_prodName_array = [];
+$quantity_array = [];
+$price_array = [];
+$unique_price_array = [];
+
+if($result){
+
+$i = 0;
+
+if($display == 1 && $method = 1){ // monthly and simple moving average
 $curyear = date('Y');
 $curmonth = date('m');
 $past1 = $curmonth - 1;
@@ -89,9 +150,8 @@ $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, 
   WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
   GROUP BY ingredient.ingName";
 
-echo "<table class='table table-striped table-bordered table-hover' id='dataTables-example'>";
-echo "<h2 class='page-header'>Monthly Forecast</h2>";
-echo "<thead>";
+
+echo "<table class='table table-striped table-bordered table-hover'>";
 echo "<tr align = center>";
 
 
@@ -99,7 +159,7 @@ echo "<th>Ingredient Name</td>";
 echo "<th>Current Total Measurement Value</td>";
 echo "<th>Forecasted Needed Value Monthly</td>";
 
-echo "</tr></thead>";
+echo "</tr>";
 
 $h = 0;
 $i = 0;
@@ -143,7 +203,7 @@ for($j; $j < $h; $j++){
       }
     }
 
-echo "<tbody>";
+
 for($l = 0; $l < $h; $l++){
 
  echo '<tr><td align="left">';
@@ -161,22 +221,12 @@ for($l = 0; $l < $h; $l++){
 }
 
 
-echo "</tbody></table>";
+echo "</table>";
 
-}
+} // end of if statement
 
-/*
-
-
-
-            YEARLY
-
-
-
-*/
-
-if($display ==2){
-	$curyear = date('Y');
+if($display == 2 && $method == 1){ //yearly and simple moving average
+$curyear = date('Y');
 $past1 = $curyear - 1;
 $past2 = $past1 - 1;
 
@@ -197,9 +247,10 @@ $query = "SELECT sales_order.salesDate AS salesDate,sales_order.salesID, product
   JOIN sales_order on sales_order.salesID = receipt.salesID
   WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
   GROUP BY ingredient.ingName";
-echo "<h2 class='page-header'>Yearly Forecast</h2>";
-echo "<table class='table table-striped table-bordered table-hover' id='dataTables-example'>";
-echo "<thead>";
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+
+
 echo "<tr align = center>";
 
 
@@ -207,7 +258,7 @@ echo "<th>Ingredient Name</td>";
 echo "<th>Current Total Measurement Value</td>";
 echo "<th>Forecasted Needed Value Yearly</td>";
 
-echo "</tr></thead>";
+echo "</tr>";
 
 $h = 0;
 $i = 0;
@@ -234,8 +285,8 @@ while($row = mysqli_fetch_array($result)){
 
     $product_name_array[$h] = $row['prodName']; // product name
     $ingredient_name_array[$h] = $row['ingName']; // ingredient name
-    $type_array[$h] = $row['measurement']; // measurement type
-    $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
     $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
 
     $h++;
@@ -251,9 +302,9 @@ for($j; $j < $h; $j++){
       }
     }
 
-    echo "<tbody>";
 
 for($l = 0; $l < $h; $l++){
+
  echo '<tr><td align="left">';
   echo $ingredient_name_array[$l];
   echo '</td><td>';
@@ -267,33 +318,208 @@ for($l = 0; $l < $h; $l++){
   echo '</td>';
   echo '</tr>';
 }
-echo "</tbody>";
+
 
 }
 
-/*
+} // end of if statement
 
+if($display == 1 && $method == 2){ // monthly and exponential smoothing
 
+}// end of if statement
 
-            SEASONAL
+if($display == 2 && $method == 2){ // yearly and exponential smoothing
+  $curyear = date('Y');
+  $past1 = $curyear - 1;
+  $past2 = $past1 - 1;
 
+  // for computing the average
+$curyear = date('Y');
+$past1 = $curyear - 1;
+$past2 = $past1 - 1;
 
+$query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  GROUP BY receipt.prodName ");
 
-*/
+$query = "SELECT sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  GROUP BY ingredient.ingName";
 
-if ($display==3) {
-  echo "<h2 class='page-header'>Seasonal Forecast</h2>";
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
 
-  if ($sql = mysqli_query($conn,'SELECT * FROM ingredient')) {
+$prodName1 = [];
+$count = [];
 
+  while($row = mysqli_fetch_array($query2)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
   }
 
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
 
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+    $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
 
+    $h++;
 }
+
+for($m=0; $m < $h; $m++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$m] == $prodName1[$k])
+
+          $forecastedaverage[$m] = ($measurement_array[$m] * $count[$k]) / 2;
+         $actualdemand[$m] = ($measurement_array[$m] * $count[$k]);
+      }
+    }
+
+
+  //New forecast = Last period’s forecast + (Last period’s actual demand – Last period’s forecast)
+
+$query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE YEAR(sales_order.salesDate) = '$past1'
+  GROUP BY receipt.prodName ");
+
+$query = "SELECT sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE YEAR(sales_order.salesDate) = '$past1'
+  GROUP BY ingredient.ingName";
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+
+
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Yearly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
+
+$prodName1 = [];
+$count = [];
+
+  while($row = mysqli_fetch_array($query2)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+    $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+    $h++;
+}
+
+$smoothingcoefficient = 0.7;
+
+    for($j =0; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k])
+
+          $forecasted[$j] = (($smoothingcoefficient * $actualdemand[$j]) + ((1-$smoothingcoefficient) * $forecastedaverage[$j]));
+      }
+    }
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+}
+
+} // end of if statement
+
+if($display == 1 && $method == 3){ // monthly and weighted moving average
+
+} //end of if statement
+
+if($display == 2 && $method == 3){ // yearly and weighted moving average
+
+
+
+}//end of if statement
+
+
 
 
 ?>
+
+
+
+
+<!--
+<script>
+   <button onclick="myFunction()">Print this page</button>
+function myFunction() {
+    window.print();
+}
+</script>
+-->
 
 </div>
 <?php include 'includes/sections/footer.php'; ?>
