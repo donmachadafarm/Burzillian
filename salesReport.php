@@ -15,8 +15,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                        </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                         <!--php code-->
@@ -58,24 +56,32 @@
                                 if(isset($_POST['submit'])){
                                     $dt1 = new DateTime($_POST['datetimepicker1']);
                                     $dt2 = new DateTime($_POST['datetimepicker2']);
+
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
+
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
-                                    $query =
-                                    "SELECT '.$date.' as 'date', SUM(S.totalPrice) as 'income', S.salesDate
-                                    FROM sales_order S
-                                    WHERE S.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}';";
-                                    $result=mysqli_query($conn,$query);
-                                    while($row=mysqli_fetch_array($result)){
-                                    echo '<tr">';
-                                        echo "<td>{$row['date']}</td>";
-                                        echo "<td>{$row['income']}</td>";
-                                        echo '<td style = "display: flex; justify-content: space-around;">';
-                                                echo "<a href = 'viewSalesReport.php'>View Report</a>";
-                                        echo'</td>';
-                                    echo '</tr>';
-                                    };
-                                }
+
+                                    $query ="SELECT S.salesDate as 'dates', SUM(R.subTotal) AS 'sales'
+                                              FROM receipt R
+                                              JOIN sales_order S ON R.salesID = S.salesID
+                                              WHERE S.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                              GROUP BY dates";
+
+                                    if($result=mysqli_query($conn,$query)){
+                                        while($row=mysqli_fetch_array($result)){
+                                          echo '<tr">';
+                                              echo "<td>{$row['dates']}</td>";
+                                              echo "<td>{$row['sales']}</td>";
+                                              echo '<td style = "display: flex; justify-content: space-around;">';
+                                                      echo "<a href = 'viewSalesReport.php?date=".$row['dates']."'>View Report</a>";
+                                              echo'</td>';
+                                          echo '</tr>';
+                                        };
+                                      }else {
+                                        echo "<script> alert('No sales found!');</script>";
+                                      }
+                                    }
                             echo '</tbody>
                                 </table>';
                         ?>

@@ -20,7 +20,14 @@
                             $dt1 =$_SESSION['from_date'];
                             $dt2 =$_SESSION['to_date'];
                             ?>
-                            <h2 style = "font-size:20px;display: flex; justify-content: center;"><?php echo date('M-d-Y', strtotime($_SESSION['from_date'])) ." to ". date('M-d-Y', strtotime($_SESSION['to_date'])); ?></h2>
+                            <h2 style = "font-size:20px;display: flex; justify-content: center;">
+                            <?php
+                            // echo proper date look
+                              $fday = new DateTime($_GET['date']); // sets the date from get method into datetime format
+                              $ffday = $fday->format('F-d-Y'); // formats the month date into words
+                              echo "Sales from ".$ffday; // prints da thing
+                            ?>
+                            </h2>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -30,47 +37,50 @@
                             echo '<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
                                         <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Total</th>
+                                        <th>Total Items Sold</th>
+                                        <th>Total Sales</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
-                                $query=
-"SELECT S.salesDate as date, S.salesID, R.salesID, R.prodName as product, R.quantity, R.subTotal, (R.subTotal / R.quantity) AS price
-FROM receipt R
-JOIN sales_order S
-ON R.salesID = S.salesID
-WHERE S.salesDate BETWEEN
-'".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
-ORDER BY product;";
+                                // $query="SELECT S.salesDate as date, S.salesID, R.salesID, R.prodName as product, R.quantity, R.subTotal, (R.subTotal / R.quantity) AS price
+                                //           FROM receipt R
+                                //           JOIN sales_order S
+                                //           ON R.salesID = S.salesID
+                                //           WHERE S.salesDate BETWEEN
+                                //           '".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."'
+                                //           ORDER BY product;";
+                                $query="SELECT S.salesID, R.salesID, R.prodName as product, SUM(R.quantity) as 'totalitems', SUM(R.subTotal) as 'totalsales'
+                                          FROM receipt R
+                                          JOIN sales_order S ON R.salesID = S.salesID
+                                          WHERE S.salesDate = '{$_GET['date']}'
+                                          GROUP BY product";
                                 $result=mysqli_query($conn,$query);
+                                $totalsales = 0;
                                 while($row=mysqli_fetch_array($result)){
-                                    $price = $row['price'];
+                                    $price = $row['totalsales'];
+                                    $totalsales+=$price;
                                     echo '<tr>';
-                                        echo "<td>{$row['date']}</td>";
                                         echo "<td>{$row['product']}</td>";
+                                        echo "<td>{$row['totalitems']}</td>";
                                         echo "<td>";
                                         echo number_format($price,2);
-                                        echo "<td>{$row['quantity']}</td>";
-                                        echo "<td>{$row['subTotal']}</td>";
+                                        echo "</td>";
                                     echo '</tr>';
                                 }
                             echo '</tbody>
                                 </table>';
-                                $query1=
-"SELECT SUM(PR.totalPrice) AS 'total'
-FROM sales_order PR
-WHERE PR.salesDate BETWEEN
-'".$_SESSION['from_date']."' AND '".$_SESSION['to_date']."';";
-                                $result1=mysqli_query($conn,$query1);
-                            echo '<div style="font-weight:bold;font-size:20px;display: flex; justify-content: center;">';
-                                echo '<label>Total Income:&nbsp;</label>';
-                                while($row=mysqli_fetch_array($result1)){
-                                    echo "<span>{$row['total']}</span>";
-                                }
+                                // $query1="SELECT SUM(PR.totalPrice) AS 'total'
+                                //         FROM sales_order PR
+                                //         WHERE PR.salesDate == '{$_GET['date']}';";
+                                // if($result1=mysqli_query($conn,$query1)){
+                                  echo '<div style="font-weight:bold;font-size:20px;display: flex; justify-content: center;">';
+                                  echo '<label>Total Income:&nbsp;</label>';
+                                //   while($row=mysqli_fetch_array($result1)){
+                                //       echo "<span>{$row['total']}</span>";
+                                //   }
+                                // }
+                                  echo "<span>".$totalsales."</span>";
                             echo '</div>';
                             echo "<br><p style = 'display: flex; justify-content: center;font-weight:bold;'>***END OF REPORT***</p>";
                             echo '<p>Generated: '.date("M-d-Y  h:i").'</p>';

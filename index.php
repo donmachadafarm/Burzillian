@@ -58,17 +58,7 @@
                           LIMIT 5";
                 if($res = mysqli_query($conn,$query)){
                  ?>
-                <!-- Discrepancy side -->
                 <div class="col-lg-6">
-                    <!-- <h3>Discrepancy</h3> -->
-                        <?php
-                          // while ($row = mysqli_fetch_array($res)) {
-                          //     echo "<div class='alert alert-danger alert-dismissable'>
-                          //             <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                          //             Discrepancies on ". $row['ingName'] . " as checked last " . $row['date'] . "
-                          //           </div>";
-                          // }
-                         ?>
                          <div class="panel panel-red">
                            <div class="panel-heading">
                              <div class="row">
@@ -99,26 +89,7 @@
                 <div class="col-lg-12">
                   <div class="panel panel-default">
                           <div class="panel-heading">
-                              <i class="fa fa-bar-chart-o fa-fw"></i> Forecasting Seasonal Chart
-                              <!-- <div class="pull-right">
-                                  <div class="btn-group">
-                                      <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                          Actions
-                                          <span class="caret"></span>
-                                      </button>
-                                      <ul class="dropdown-menu pull-right" role="menu">
-                                          <li><a href="#">Action</a>
-                                          </li>
-                                          <li><a href="#">Another action</a>
-                                          </li>
-                                          <li><a href="#">Something else here</a>
-                                          </li>
-                                          <li class="divider"></li>
-                                          <li><a href="#">Separated link</a>
-                                          </li>
-                                      </ul>
-                                  </div>
-                              </div> -->
+                              <i class="fa fa-bar-chart-o fa-fw"></i> Daily Sales
                           </div>
                           <!-- /.panel-heading -->
                           <div class="panel-body">
@@ -131,15 +102,5 @@
 
 
 </div>
-
-<?php
-
-    // Discrepancies part
-
-    // Forecasting part
-
-
-?>
-
 
 <?php include 'includes/sections/footer.php'; ?>
