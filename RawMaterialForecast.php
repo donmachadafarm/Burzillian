@@ -12,7 +12,6 @@
                                             <select name = "table_select" class="form-control" style="width: 300px;">
                                               <option value="1">Monthly Forecast</option>
                                               <option value="2">Yearly Forecast</option>
-                                              <option value="3">Seasonal Forecast</option>
                                         </select>
                                         </div>
                                         <div class="form-group">
@@ -21,6 +20,9 @@
                                               <option value="1">Simple Moving Average</option>
                                               <option value="2">Exponential Smoothing</option>
                                               <option value="3">Weighted Moving Average</option>
+                                              <option value="4">Naive Bayes</option>
+                                              <option value="5">Least Square Regression</option>
+                                              <option value="6">Linear Smoothing</option>
                                         </select>
                                         </div>
 
@@ -56,23 +58,6 @@ if (isset($_POST['submit']))
     $method = $_POST['method'];
 }
 
-
-//Calculate the median of array
-function calculate_median($arr) {
-    sort($arr);
-    $count = count($arr); //total numbers in array
-    $middleval = floor(($count-1)/2); // find the middle value, or the lowest middle value
-    if($count % 2) { // odd number, middle is the median
-        $median = $arr[$middleval];
-    } else { // even number, calculate avg of 2 medians
-        $low = $arr[$middleval];
-        $high = $arr[$middleval+1];
-        $median = floor(($low+$high)/2);
-    }
-    return $median;
-} // end median function
-
-//Calculate the average of array
 
 //Get most recent date
 $most_recent_date = "";
@@ -131,11 +116,12 @@ $curyear = date('Y');
 $curmonth = date('m');
 $past1 = $curmonth - 1;
 $past2 = $past1 - 1;
+$past3 = $past2 - 1;
 
 $query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY receipt.prodName";
 
 $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -147,7 +133,7 @@ $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, 
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY ingredient.ingName";
 
 
@@ -199,7 +185,7 @@ for($j; $j < $h; $j++){
 
         if($product_name_array[$j] == $prodName1[$k])
 
-          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 2;
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
       }
     }
 
@@ -229,11 +215,12 @@ if($display == 2 && $method == 1){ //yearly and simple moving average
 $curyear = date('Y');
 $past1 = $curyear - 1;
 $past2 = $past1 - 1;
+$past3 = $past2 - 1;
 
 $query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY receipt.prodName ");
 
 $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -245,7 +232,7 @@ $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate,sales_o
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY ingredient.ingName";
 
 echo "<table class='table table-striped table-bordered table-hover'>";
@@ -298,7 +285,7 @@ for($j; $j < $h; $j++){
 
         if($product_name_array[$j] == $prodName1[$k])
 
-          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 2;
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
       }
     }
 
@@ -328,11 +315,12 @@ if($display == 1 && $method == 2){ // monthly and exponential smoothing
     $curmonth = date('m');
 $past1 = $curmonth - 1;
 $past2 = $past1 - 1;
+$past3 = $past2 - 1;
 
 $query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY receipt.prodName";
 
 $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -344,7 +332,7 @@ $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, 
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY ingredient.ingName";
 
 $h = 0;
@@ -385,7 +373,7 @@ for($m=0; $m < $h; $m++){
 
         if($product_name_array[$m] == $prodName1[$k])
 
-          $forecastedaverage[$m] = ($measurement_array[$m] * $count[$k]) / 2;
+          $forecastedaverage[$m] = ($measurement_array[$m] * $count[$k]) / 3;
          $actualdemand[$m] = ($measurement_array[$m] * $count[$k]);
       }
     }
@@ -394,7 +382,7 @@ for($m=0; $m < $h; $m++){
 $query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) = '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY receipt.prodName ");
 
 $query = "SELECT sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -406,7 +394,7 @@ $query = "SELECT sales_order.salesDate AS salesDate,sales_order.salesID, product
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) = '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY ingredient.ingName";
 
 echo "<table class='table table-striped table-bordered table-hover'>";
@@ -486,13 +474,14 @@ if($display == 2 && $method == 2){ // yearly and exponential smoothing
   $curyear = date('Y');
   $past1 = $curyear - 1;
   $past2 = $past1 - 1;
+  $past3 = $past2 - 1;
 
   //New forecast = Last period’s forecast + (Last period’s actual demand – Last period’s forecast)
 
 $query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY receipt.prodName ");
 
 $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -504,7 +493,7 @@ $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate,sales_o
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY ingredient.ingName";
 
 echo "<table class='table table-striped table-bordered table-hover'>";
@@ -597,11 +586,12 @@ if($display == 1 && $method == 3){ // monthly and weighted moving average
  $curmonth = date('m');
 $past1 = $curmonth - 1;
 $past2 = $past1 - 1;
+$past3 = $past2 - 1;
 
 $query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY receipt.prodName";
 
 $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -613,7 +603,7 @@ $query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, 
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
   GROUP BY ingredient.ingName";
 
   echo "<table class='table table-striped table-bordered table-hover'>";
@@ -659,10 +649,13 @@ while($row = mysqli_fetch_array($result)){
         $measurement[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
 
     if($salesDate[$h] == $past1){
-      $measurement_array[$h] = $measurement[$h] * .5;
+      $measurement_array[$h] = $measurement[$h] * 0.9;
     }
     else if($salesDate[$h] == $past2){
-      $measurement_array[$h] = $measurement[$h] * .3;
+      $measurement_array[$h] = $measurement[$h] * 0.5;
+    }
+    else if($salesDate[$h] == $past3){
+      $measurement_array[$h] = $measurement[$h] * 0.3;
     }
 
     $h++;
@@ -674,7 +667,7 @@ for($j; $j < $h; $j++){
 
         if($product_name_array[$j] == $prodName1[$k])
 
-          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 2;
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
       }
     }
 
@@ -707,11 +700,12 @@ if($display == 2 && $method == 3){ // yearly and weighted moving average
 $curyear = date('Y');
 $past1 = $curyear - 1;
 $past2 = $past1 - 1;
+$past3 = $past2 - 1;
 
 $query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
   FROM receipt
   JOIN sales_order ON sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY receipt.prodName ");
 
 $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate, YEAR(sales_order.salesDate) AS salesYear, sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
@@ -723,7 +717,7 @@ $query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate, YEAR(s
   JOIN inventory on ingredient.ingID = inventory.ingID
   JOIN receipt on product.prodName = receipt.prodName
   JOIN sales_order on sales_order.salesID = receipt.salesID
-  WHERE sales_order.salesDate BETWEEN '$past2-1-1' AND '$past1-12-31'
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
   GROUP BY ingredient.ingName";
 
 echo "<table class='table table-striped table-bordered table-hover'>";
@@ -768,11 +762,14 @@ while($row = mysqli_fetch_array($result)){
         $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
         $measurement[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
 
-    if($salesYear[$h] == $past1){
-      $measurement_array[$h] = $measurement[$h] * .5;
+    if($salesDate[$h] == $past1){
+      $measurement_array[$h] = $measurement[$h] * 0.9;
     }
-    else if($salesYear[$h] == $past2){
-      $measurement_array[$h] = $measurement[$h] * .3;
+    else if($salesDate[$h] == $past2){
+      $measurement_array[$h] = $measurement[$h] * 0.5;
+    }
+    else if($salesDate[$h] == $past3){
+      $measurement_array[$h] = $measurement[$h] * 0.3;
     }
 
     $h++;
@@ -784,7 +781,436 @@ for($j; $j < $h; $j++){
 
         if($product_name_array[$j] == $prodName1[$k])
 
-          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 2;
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
+      }
+    }
+
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+
+}
+}//end of if statement
+
+
+if($display == 1 && $method == 4){ //naive bayes monthly
+$curmonth = date('m');
+$past1 = $curmonth - 1;
+$past2 = $past1 - 1;
+
+$query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) = '$past1'
+  GROUP BY receipt.prodName";
+
+$query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) = '$past1'
+  GROUP BY ingredient.ingName";
+
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Monthly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
+
+$prodName1 = [];
+$count = [];
+$result1=mysqli_query($conn,$query2);
+  while($row = mysqli_fetch_array($result1)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+    $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+    $h++;
+}
+
+for($j; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k])
+
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]);
+      }
+    }
+
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+}
+
+
+echo "</table>";
+} //end if statement
+
+if($display == 2 && $method == 4){ //naive bayes yearly
+$curyear = date('Y');
+$past1 = $curyear - 1;
+
+
+$query2 = "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate = '$past1'
+  GROUP BY receipt.prodName ";
+
+$query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate = '$past1'
+  GROUP BY ingredient.ingName";
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+
+
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Yearly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
+
+$prodName1 = [];
+$count = [];
+$result1=mysqli_query($conn,$query2);
+  while($row = mysqli_fetch_array($result1)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+    $measurement_array[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+    $h++;
+}
+
+for($j; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k])
+
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]);
+      }
+    }
+
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+}
+echo "</table>";
+
+
+
+} //end if statement
+
+
+if($display == 1 && $method == 5){ // Least Square Regression monthly
+$curmonth = date('m');
+$past1 = $curmonth - 1;
+$past2 = $past1 - 1;
+
+$query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  GROUP BY receipt.prodName";
+
+$query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past2' AND '$past1'
+  GROUP BY ingredient.ingName";
+
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Monthly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+
+$forecasted = [];
+$ave = [];
+$sum1 = [];
+$sum2 = [];
+$totalsum = [];
+$diff = [];
+$value1 = [];
+$value2 = [];
+
+$prodName1 = [];
+$count = [];
+
+
+$result1=mysqli_query($conn,$query2);
+  while($row = mysqli_fetch_array($result1)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+  $salesDate[$h] = $row['salesDate'];
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+    $measurement[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+  if($salesDate[$h] == $past1){
+      $sum1[$h] = $measurement[$h] * 2;
+    }
+    else if($salesDate[$h] == $past2){
+      $sum1[$h] = $measurement[$h] * 1;
+    }
+
+
+    $h++;
+}
+
+for($j; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k]){
+      $sum1[$j] = ($sum1[$j] * $count[$k]);
+          $ave[$j] = ($measurement[$j] * $count[$k])/2;
+      $diff[$j] = ($sum1[$j] - $ave[$j] * 3);
+      $value1[$j] = ($diff[$j] / .5);
+      $value2[$j] = ($ave[$j] - $value1[$j] * .5);
+      $forecasted[$j] = (3 * $value1[$j]) + $value2[$j];
+
+
+    }
+      }
+
+    }
+
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+}
+
+
+echo "</table>";
+}
+
+if($display == 1 && $method == 3){ // monthly and linear smoothing
+ $curmonth = date('m');
+$past1 = $curmonth - 1;
+$past2 = $past1 - 1;
+$past3 = $past2 - 1;
+
+$query2 = "SELECT MONTH(sales_order.salesDate) AS salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) as count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
+  GROUP BY receipt.prodName";
+
+$query = "SELECT MONTH(sales_order.salesDate) AS salesDate,sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE MONTH(sales_order.salesDate) BETWEEN '$past3' AND '$past1'
+  GROUP BY ingredient.ingName";
+
+  echo "<table class='table table-striped table-bordered table-hover'>";
+
+
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Yearly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
+
+$prodName1 = [];
+$count = [];
+$result1=mysqli_query($conn,$query2);
+  while($row = mysqli_fetch_array($result1)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+  $salesDate[$h] = $row['salesDate'];
+
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+        $measurement[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+    if($salesDate[$h] == $past1){
+      $measurement_array[$h] = $measurement[$h] * 0.5;
+    }
+    else if($salesDate[$h] == $past2){
+      $measurement_array[$h] = $measurement[$h] * 0.3333;
+    }
+    else if($salesDate[$h] == $past3){
+      $measurement_array[$h] = $measurement[$h] * 0.1666;
+    }
+
+    $h++;
+}
+
+for($j; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k])
+
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
       }
     }
 
@@ -808,24 +1234,122 @@ for($l = 0; $l < $h; $l++){
 
 
 
-}//end of if statement
 
+
+
+} //end of if statement
+
+if($display == 2 && $method == 6){ // yearly and linear smoothing
+$past1 = $curyear - 1;
+$past2 = $past1 - 1;
+$past3 = $past2 - 1;
+
+$query2 = mysqli_query($conn, "SELECT sales_order.salesDate, sales_order.salesID, receipt.prodName AS prodName, COUNT(*) AS count
+  FROM receipt
+  JOIN sales_order ON sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
+  GROUP BY receipt.prodName ");
+
+$query = "SELECT sales_order.salesID, sales_order.salesDate AS salesDate, YEAR(sales_order.salesDate) AS salesYear, sales_order.salesID, product.prodName, ingredient.ingName, ingredient.measurement, recipeing.convertedMeasurement AS convertedMeasurement, ingredient.total AS ingTotal
+  FROM recipe
+  JOIN recipeing on recipe.recipeID = recipeing.recipeID
+  JOIN product on recipe.prodID = product.prodID
+  JOIN ingredient on ingredient.ingID = recipeing.ingID
+  JOIN converter on recipeing.measureID = converter.convertID
+  JOIN inventory on ingredient.ingID = inventory.ingID
+  JOIN receipt on product.prodName = receipt.prodName
+  JOIN sales_order on sales_order.salesID = receipt.salesID
+  WHERE sales_order.salesDate BETWEEN '$past3-1-1' AND '$past1-12-31'
+  GROUP BY ingredient.ingName";
+
+echo "<table class='table table-striped table-bordered table-hover'>";
+
+
+echo "<tr align = center>";
+
+
+echo "<th>Ingredient Name</td>";
+echo "<th>Current Total Measurement Value</td>";
+echo "<th>Forecasted Needed Value Yearly</td>";
+
+echo "</tr>";
+
+$h = 0;
+$i = 0;
+$j = 0;
+$product_name_array = [];
+$ingredient_name_array = [];
+$type_array = [];
+$current_value_array = [];
+$measurement_array = [];
+$forecasted = [];
+
+$prodName1 = [];
+$count = [];
+
+  while($row = mysqli_fetch_array($query2)){
+    $prodName1[$i] = $row['prodName'];
+    $count[$i] = $row['count'];
+
+    $i++;
+  }
+
+$result=mysqli_query($conn,$query);
+while($row = mysqli_fetch_array($result)){
+  $salesYear[$h] = $row['salesYear'];
+
+    $product_name_array[$h] = $row['prodName']; // product name
+    $ingredient_name_array[$h] = $row['ingName']; // ingredient name
+       $type_array[$h] = $row['measurement']; // measurement type
+        $current_value_array[$h] = $row['ingTotal']; // total ingredients in database
+        $measurement[$h] = $row['convertedMeasurement']; // converted measurement per ingredient
+
+    if($salesDate[$h] == $past1){
+      $measurement_array[$h] = $measurement[$h] * 0.5;
+    }
+    else if($salesDate[$h] == $past2){
+      $measurement_array[$h] = $measurement[$h] * 0.3333;
+    }
+    else if($salesDate[$h] == $past3){
+      $measurement_array[$h] = $measurement[$h] * 0.1666;
+    }
+
+    $h++;
+}
+
+for($j; $j < $h; $j++){
+
+    for($k = 0; $k < $i; $k++){
+
+        if($product_name_array[$j] == $prodName1[$k])
+
+          $forecasted[$j] = ($measurement_array[$j] * $count[$k]) / 3;
+      }
+    }
+
+
+for($l = 0; $l < $h; $l++){
+
+ echo '<tr><td align="left">';
+  echo $ingredient_name_array[$l];
+  echo '</td><td>';
+  echo number_format($current_value_array[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td><td>';
+  echo number_format($forecasted[$l],2);
+  echo '&nbsp';
+  echo $type_array[$l];
+  echo '</td>';
+  echo '</tr>';
+
+}
+}//end of if statement
 
 
 
 ?>
 
-
-
-
-<!--
-<script>
-   <button onclick="myFunction()">Print this page</button>
-function myFunction() {
-    window.print();
-}
-</script>
--->
 
 </div>
 <?php include 'includes/sections/footer.php'; ?>

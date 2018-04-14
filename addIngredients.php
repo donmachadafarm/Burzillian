@@ -82,9 +82,9 @@
                                         </div>
                                         <div class="form-group">
                                             <label>Ingredient Name</label>
-                                            <input type = "text" name = "ingName" class="form-control" value="">
+                                            <input type = "text" name = "ingName" class="form-control" value="" required>
                                         </div>
-                                        <button name = "submit" type="submit" class="btn btn-default">Add Ingredient</button>
+                                        <button name = "submit" type="submit" class="btn btn-success">Add Ingredient</button>
                                     </form>
                                     <br><br>
                                     Note: All ingredients added will not be added in the list until raw materials are set.

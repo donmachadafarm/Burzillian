@@ -60,7 +60,7 @@
                                     $_SESSION['from_date'] = $dt1->format('Y-m-d');
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
 
-                                    $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
+                                    // $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
 
                                     $query ="SELECT S.salesDate as 'dates', SUM(R.subTotal) AS 'sales'
                                               FROM receipt R
@@ -72,7 +72,7 @@
                                         while($row=mysqli_fetch_array($result)){
                                           echo '<tr">';
                                               echo "<td>{$row['dates']}</td>";
-                                              echo "<td>{$row['sales']}</td>";
+                                              echo "<td><center>{$row['sales']}</center></td>";
                                               echo '<td style = "display: flex; justify-content: space-around;">';
                                                       echo "<a href = 'viewSalesReport.php?date=".$row['dates']."'>View Report</a>";
                                               echo'</td>';

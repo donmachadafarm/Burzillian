@@ -1,7 +1,7 @@
 <?php include 'includes/sections/header.php';
       include 'includes/sections/navbar.php';
 
-      if (!isset($_SESSION['userType']) || $_SESSION['userType']!=102){
+            if (!isset($_SESSION['userType'])){
         echo "<script>window.location='logout.php'</script>";
       }
  ?>
@@ -82,11 +82,11 @@
                             while($row = mysqli_fetch_array($convert))
                             {
                                 if($nType[$index] == $row['convertID']){
-                                    $new_val = $val*$row['convert_value'];
+                                    $new_val = $val*$row['convertValue'];
                                 }
                             }
 
-                            $query2 = mysqli_query($conn, "INSERT INTO recipeing (recipeID,ingID, measureID, measureVal, converted_measurement) VALUES ((SELECT MAX(recipeID) FROM recipe),'{$rCheck[$index]}', '{$nType[$index]}', '{$val}', '{$new_val}')");
+                            $query2 = mysqli_query($conn, "INSERT INTO recipeing (recipeID,ingID, measureID, measureVal, convertedMeasurement) VALUES ((SELECT MAX(recipeID) FROM recipe),'{$rCheck[$index]}', '{$nType[$index]}', '{$val}', '{$new_val}')");
                         }
 
                     //}
@@ -161,11 +161,11 @@
                                                 echo '<div class = "checkbox">';
                                                 echo "<label><input name = \"checkbox[]\" type = \"checkbox\" value = \"{$row['ingID']}\"/>{$row['ingName']}</label><br>";
                                                 echo "&nbsp";
-                                                $sql1=mysqli_query($conn, "select * from converter");
+                                                $sql1=mysqli_query($conn, "select DISTINCT(convertFrom), convertID from converter group by convertFrom");
                                                 echo "<input name = \"mVal[]\" type = \"number\" value = \"\"/>&nbsp";
                                                 echo "<select name= 'selectMeasure[]'>";
                                                     while($row=mysqli_fetch_array($sql1)){
-                                                        echo "<option value = \"{$row['convertID']}\">{$row['convert_from']}</option>";
+                                                        echo "<option value = \"{$row['convertID']}\">{$row['convertFrom']}</option>";
                                                     }
                                                 echo "</select><br>";
                                                 echo "</div>";

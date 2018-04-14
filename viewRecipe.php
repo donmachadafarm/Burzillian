@@ -7,6 +7,11 @@
  ?>
       <div id="page-wrapper">
             <div class="container-fluid">
+              <?php
+                $query = mysqli_query($conn,"SELECT * FROM product WHERE prodID = '{$_GET['view']}'");
+                $rowd = mysqli_fetch_array($query,MYSQLI_ASSOC);
+              ?>
+              <h2 class="page-header">Recipe of <?php echo $rowd['prodName']; ?></h2>
                 <div class="row">
                     <div class="col-lg-12">
                         <!-- php code -->
@@ -16,8 +21,8 @@
                             $sql = mysqli_query($conn,"select * FROM recipeing WHERE recipeID = '$id'");
 
                             while($row=mysqli_fetch_array($query)){
-                                echo '<a style= "float:right;margin-top:20px;" href="recipeList.php">go back to recipe list</a><br>';
-                                echo '<div class="panel-body">';
+                                echo '<a style= "float:right;margin-top:20px;margin-right:20px;" href="recipeList.php">go back to recipe list</a><br>';
+                                echo '<br /><div class="panel-body">';
 
 
                                 echo '<table  class=\'table table-striped table-bordered table-hover\' >

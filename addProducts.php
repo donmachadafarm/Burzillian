@@ -28,13 +28,13 @@
 
                                         <div class="form-group">
                                             <label>Enter Product Name</label>
-                                            <input name = "productname" class="form-control" placeholder="Enter product name">
+                                            <input name = "productname" class="form-control" placeholder="Enter product name" required>
                                         </div>
 
 
                                         <div class="form-group">
                                             <label>Select Product Type</label>
-                                            <select name = "producttype" class="form-control">
+                                            <select name = "producttype" class="form-control" required>
                                               <option value="food" selected>Food</option>
                                               <option value="drink">Drink</option>
                                               <option value="others">Others</option>
@@ -43,11 +43,11 @@
 
                                            <div class="form-group">
                                             <label>Enter Price</label>
-                                            <input type = "number" name = "price" class="form-control" placeholder="Enter product price">
+                                            <input type = "number" name = "price" class="form-control" placeholder="Enter product price" required>
                                         </div>
 
-                                        <button type="submit" name = "submit" class="btn btn-default">Add Product</button>
-                                        <button type="reset" class="btn btn-default">Reset Form</button>
+                                        <button type="submit" name = "submit" class="btn btn-success">Add Product</button>
+                                        <button type="reset" class="btn btn-danger">Reset Form</button>
 
                                     </form>
 

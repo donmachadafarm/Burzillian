@@ -63,13 +63,13 @@
 
 
                                                     <p class="form-control-static">
-                                                        <label>Measurement Convert From Value:</label></br> <input type="text" name="convertfrom" class="form-control" value="<?php if (isset($_POST['convertfrom'])) echo $_POST['convertfrom']; ?>"/>
+                                                        <label>Measurement Convert From Value:</label></br> <input placeholder="ex: Kilogram" type="text" name="convertfrom" class="form-control" required>
                                                         </br>
-                                                        <label>Measurement Convert To Value: </label></br><input type="text" name="convertto" class="form-control" value="<?php if (isset($_POST['convertto'])) echo $_POST['convertto']; ?>"/>
+                                                        <label>Measurement Convert To Value: </label></br><input placeholder="ex: Gram" type="text" name="convertto" class="form-control" required>
                                                         </br>
-                                                        <label>Convertion Value: </label> </br><input type="text" name="convertvalue" class="form-control" maxlength="30" value="<?php if (isset($_POST['convertvalue'])) echo $_POST['convertvalue']; ?>"/>
+                                                        <label>Convertion Value: </label> </br><input type="number" name="convertvalue" class="form-control" maxlength="30" required>
                                                         </p>
-                                                        <input type="submit" name="submit" value="Add Measurements" class="btn btn-default"/></div>
+                                                        <input type="submit" name="submit" value="Add Measurements" class="btn btn-primary"/></div>
                                                         <br><br>
                       </div>
                         <!-- /.panel-body -->
@@ -91,20 +91,20 @@ $message=NULL;
 
  if (empty($_POST['convertfrom'])){
   $convertfrom=FALSE;
-  $message.='<p>You forgot to enter the measurement for the convert from value!';
+  $message.='You forgot to enter the measurement for the convert from value!';
  }else
   $convertfrom=$_POST['convertfrom'];
 
  if (empty($_POST['convertto'])){
   $convertto=FALSE;
-  $message.='<p>You forgot to enter the measurement for the convert to value!';
+  $message.='You forgot to enter the measurement for the convert to value!';
 
  }else
   $convertto=$_POST['convertto'];
 
  if (empty($_POST['convertvalue'])){
   $convertvalue=FALSE;
-  $message.='<p>You forgot to enter the measurement value!';
+  $message.='You forgot to enter the measurement value!';
  }else
   $convertvalue=$_POST['convertvalue'];
 
@@ -115,17 +115,15 @@ $message=NULL;
 if(!isset($message)){
 $query="insert into converter (convertFrom,convertTo,convertValue) values ('{$convertfrom}','{$convertto}','{$convertvalue}')";
 $result=mysqli_query($conn,$query);
-$message="<b>INPUT SUCCESSFUL! </b>";
+$message="INPUT SUCCESSFUL!";
+echo "<script>alert('$message');</script>";
+echo "<script>document.location.href='converter.php';</script>";
 
 }
 
 
 }/*End of main Submit conditional*/
 
-if (isset($message)){
- echo '<font color="red">'.$message. '</font>';
-
-}
 
 ?>
                                     </div></div></form></div></div><!--End Modal-->

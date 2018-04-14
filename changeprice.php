@@ -59,7 +59,7 @@
                             </div>
                             <!-- /.table-responsive -->
 
-                                                     <form name="form1" id="form1" action="" class="form-signin" method="post">
+                                                     <form name="form1" id="form1" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-signin" method="post">
 
 
                                                     <p class="form-control-static">
@@ -80,7 +80,7 @@
 													</select>
 
                                                         </br>
-                                                        <label>New Price: </label></br><input type="text" name="new_price" class="form-control" value="<?php if (isset($_POST['new_price'])) echo $_POST['new_price']; ?>"/>
+                                                        <label>New Price: </label></br><input type="number" name="new_price" class="form-control" required>
                                                         </br>
                                                         </p>
                                                         <input type="submit" name="submit" value="Change Price" class="btn btn-default"/></div>
@@ -101,7 +101,6 @@
 
 if (isset($_POST['submit'])){
 
-$message=NULL;
 	$date = date('Y-m-d');
 	$prodID=$_POST['prodID'];
 	$sql1 = "SELECT * from product WHERE prodID = '$prodID'";
@@ -109,28 +108,30 @@ $message=NULL;
     $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
     $old_price = $row['price'];
 
-
- if (empty($_POST['new_price'])){
-  $new_price=FALSE;
-  $message.='<p>You forgot to enter the new price!';
-
- }else
+ //
+ // if (empty($_POST['new_price'])){
+ //  $new_price=FALSE;
+ //  $message.='<p>You forgot to enter the new price!';
+ //
+ // }else
   $new_price=$_POST['new_price'];
 
-if(!isset($message)){
-$query="insert into price_list (old_price,new_price,date_edited, product_id) values ('$old_price','$new_price','$date','$prodID')";
+$query="insert into price_list (oldPrice,newPrice,dateEdited, prodID) values ('$old_price','$new_price','$date','$prodID')";
 $result=mysqli_query($conn,$query);
 $query1 = "UPDATE product SET price = $new_price WHERE prodID = '$prodID'";
-$result1=mysqli_query($conn,$query1);
+
+if ($result1=mysqli_query($conn,$query1)) {
+  echo "<script>alert('Changed the price of {$row['prodName']}');
+        </script>";
+
 }
 
+echo "<script>document.location.href='changeprice.php';</script>";
 
 }/*End of main Submit conditional*/
 
-if (isset($message)){
- echo '<font color="red">'.$message. '</font>';
 
-}
+
 
 ?>
                                     </div></div></form></div></div><!--End Modal-->

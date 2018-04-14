@@ -64,7 +64,7 @@
             // echo '<td>';
             // echo $quantity;
             echo '<td>';
-            echo number_format($measurement_value,2);
+            echo number_format($measurement_value,4);
             echo '<td>';
             echo $measurement;
             echo'</td>';

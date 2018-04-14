@@ -105,15 +105,15 @@
 
 
         <label>Raw Material Name: </label><br>
-        <input type="text" name="rmName" placeholder="" class="form-control"><br>
+        <input type="text" name="rmName" placeholder="" class="form-control" required><br>
 
          <label class="control-label"  for="measurement_value">Measurement Value: </label><br>
-        <input type="text" name="measurement_value" placeholder="Ex. 250" class="form-control"><br>
+        <input type="text" name="measurement_value" placeholder="Ex. 250" class="form-control" required><br>
 
 
 
        <label class="control-label" for="measurement">Measurement: </label>
-<select name ="measurement" class="form-control">
+<select name ="measurement" class="form-control" required>
         <?php
    // require 'Connect.php';
     $flag=0;
@@ -132,8 +132,6 @@
         }
 
 
-             echo "<label><option value = \"Liter\"/>Liter</label> <br>";
-             echo "<label><option value = \"Kilogram\"/>Kilogram</label>";
              echo "</div>";
 ?>
 </select>

@@ -52,7 +52,7 @@
                                     </style>
 
         <br>
-        <button class="btn default" id="addraw">Add Raw Material</button>
+        <button class="btn btn-success" id="addraw">Add Raw Material</button>
         </form>
 
 

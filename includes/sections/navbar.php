@@ -73,7 +73,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-user">
                         <li>
-                          <p><i class="fa fa-user fa-fw"></i> <?php echo $_SESSION['name']; ?></p>
+                          <p align="center"><i class="fa fa-user fa-fw"></i> <?php echo $_SESSION['name']; ?></p>
                         </li>
                         <?php if ($_SESSION['userType']==101) {
                           echo "<li><a href='addnewaccount.php'><i class='fa fa-user-plus fa-fw'></i> Add New User</a>

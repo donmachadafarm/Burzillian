@@ -106,7 +106,7 @@ echo '</select>';// Close drop down box
 
                                 <br><br>
 <center><hr>
-                              <button type="submit" name = "submit" class="btn btn-default">Submit Order</button>
+                              <button type="submit" name = "submit" class="btn btn-success">Submit Order</button>
 
                                <br>
 

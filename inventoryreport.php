@@ -53,8 +53,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>Raw Material</th>
-                                        <th>Total Quantity</th>
+                                        <th>Option</th>
                                     </tr>
                                 </thead>
                                 <tbody>';
@@ -65,17 +64,32 @@
                                     $_SESSION['to_date'] =  $dt2->format('Y-m-d');
                                     $date = $_SESSION['from_date']." to ". $_SESSION['to_date'];
 
-                                    $query = mysqli_query($conn, "Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate
-                                            from record_purchases
-                                            where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
-                                            group by rmName
-                                            order by purchasedate ASC;");
+                                    // $query ="SELECT S.salesDate as 'dates', SUM(R.subTotal) AS 'sales'
+                                    //           FROM receipt R
+                                    //           JOIN sales_order S ON R.salesID = S.salesID
+                                    //           WHERE S.salesDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                    //           GROUP BY dates";
+                                    // $query = mysqli_query($conn, "Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate
+                                    //         from record_purchases
+                                    //         where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                    //         group by purchasedate
+                                    //         order by purchasedate ASC;");
+                                    // SELECT DISTINCT r.rmName, r.purchaseDate AS 'dateb', SUM(r.quantity) AS 'qty'
+                                    //                               FROM record_purchases r
+                                    //                               WHERE r.purchaseDate BETWEEN '2018-03-01' AND '2018-04-13'
+                                    //                               GROUP BY r.rmName
+                                    $query = mysqli_query($conn,"SELECT DISTINCT r.purchaseDate AS 'dateb', SUM(r.quantity) AS 'qty'
+                                                                  FROM record_purchases r
+                                                                  WHERE r.purchaseDate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                                                  GROUP BY dateb");
                                     //$result=mysqli_query($conn,$query);
                                     while($row=mysqli_fetch_array($query)){
                                     echo '<tr">';
-                                        echo "<td>{$row['date']}</td>";
-                                        echo "<td>{$row['rmName']}</a></td>";
-                                        echo "<td>{$row['quantity']}</td>";
+                                        echo "<td><center>{$row['dateb']}</center></td>";
+                                        echo "<td><center><a href='viewinventoryreport.php?date={$row['dateb']}'>View Report</a></center></td>";
+                                        // echo "<td><a data-toggle='modal' href='#inventoryreport' class='btn btn-primary'>View Report</a></td>";
+                                        // echo "<td>{$row['rmName']}</a></td>";
+                                        // echo "<td>{$row['qty']}</td>";
 
 
                                         echo'</td>';
@@ -90,8 +104,8 @@
 
                         ?>
 
-                        <center> <a data-toggle="modal" href="#inventoryreport" class="btn btn-primary">View Report</a>
-        <div class="modal fade" id="inventoryreport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <!-- <center> <a data-toggle="modal" href="#inventoryreport" class="btn btn-primary">View Report</a> -->
+        <!-- <div class="modal fade" id="inventoryreport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <form name="form1" id="form1" action="" class="form-signin" method="POST">
@@ -101,9 +115,11 @@
                   <div class="modal-body">
 
                   <header><B><font size="5">Inventory Report</font></B><br>
-                  <?php echo $_SESSION['from_date'];
-                        echo " to ";
-                        echo $_SESSION['to_date'];?>
+                  <?php
+                  // echo $_SESSION['from_date'];
+                  //       echo " to ";
+                  //       echo $_SESSION['to_date'];
+                        ?>
                   </header><br>
 
 
@@ -117,24 +133,26 @@
                                 </thead>
                                 <tbody>
                                 <?php
-                                $query ="Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate, purchaseID
-                                            from record_purchases
-                                            where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
-                                            group by purchaseID;";
-                                    $result=mysqli_query($conn,$query);
-                                    while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                                    echo '<tr">';
-                                        echo "<td>{$row['purchasedate']}</td>";
-                                        echo "<td>{$row['rmName']}</td>";
-                                        echo "<td>{$row['quantity']}</td>";
-
-                                    echo '</tr>';
-                                    }
+                                // $query ="Select '$date' as date, rmName, sum(quantity) as 'quantity', purchasedate, purchaseID
+                                //             from record_purchases
+                                //             where purchasedate BETWEEN '{$_SESSION['from_date']}' AND '{$_SESSION['to_date']}'
+                                //             group by purchaseID;";
+                                //     $result=mysqli_query($conn,$query);
+                                //     while($row=mysqli_fetch_array($result,MYSQLI_ASSOC)){
+                                //     echo '<tr">';
+                                //         echo "<td>{$row['purchasedate']}</td>";
+                                //         echo "<td>{$row['rmName']}</td>";
+                                //         echo "<td>{$row['quantity']}</td>";
+                                //
+                                //     echo '</tr>';
+                                //     }
 
                                 ?>
                                 </tbody></table>
                                 End of Report
-                                <?php  echo '<p>Generated: '.date("M-d-Y  h:i").'</p>';?>
+                                <?php
+                                // echo '<p>Generated: '.date("M-d-Y  h:i").'</p>';
+                                ?>
 
                         <br><br>
 
@@ -144,10 +162,10 @@
 
                   </div>
 
-                            <!-- /.table-responsive -->
-                        </div>
+                            <!- /.table-responsive -->
+                        <!-- </div> -->
                         <!-- /.panel-body -->
-                    </div>
+                    <!-- </div> -->
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-12 -->

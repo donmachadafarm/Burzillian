@@ -55,7 +55,7 @@
                                       </p>
                                       </div>
 
-                                      <input type="submit" name="submit" value="Submit"  class="btn btn-default">
+                                      <input type="submit" name="submit" value="Submit"  class="btn btn-success">
                                       </form>
 
 
